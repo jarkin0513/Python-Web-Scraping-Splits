@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -7,16 +8,29 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import Splits.Paths as paths
 
+chrome_options= Options()
+chrome_options.add_argument("--start-maximized")
+f = open("output.txt", "w")
+
 class Splits(webdriver.Chrome):
-    def __init__(self, driver_path="chromedriver.exe", options=webdriver.ChromeOptions()):
-        self.driver_path = driver_path
-        self.options = options
-        options.add_argument("--start-maximized")
+
+    def __init__(self, driver_path="chromedriver.exe"):
+        self.driver_path = driver_path        
+        super(Splits, self).__init__(options=chrome_options)
+
+    def go_to_url(self):
         self.get(paths.URL)
-        super(Splits, self).__init__()
+        WebDriverWait(self, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, paths.BUTTON_SECTION))
+        )
+
+        time.sleep(2)
+
+        self.find_element(By.XPATH, paths.SPLITS_BUTTON_QUERY).click()
+        print("Clicked splits")
 
     def get_players(self):
-        lst = get_team_stats()
+        lst = self.get_team_stats()
         print(lst[1:])
 
     def get_team_stats(self):
@@ -28,7 +42,7 @@ class Splits(webdriver.Chrome):
         )
         time.sleep(2)
 
-        team = get_underdog(self)
+        team = self.get_underdog()
         if team[0] == '| Away':
             team_stats = self.find_element(By.XPATH, paths.AWAY_TEAM_STATS).text  
         elif team[0] == '| Home':
@@ -47,6 +61,7 @@ class Splits(webdriver.Chrome):
     def check_stats():
         pass
 
+    # Finds unfavored team based on odds
     def get_underdog(self):
 
         underdog_output = []
@@ -69,6 +84,14 @@ class Splits(webdriver.Chrome):
         underdog_output.append(underdog_odds)
 
         return underdog_output
+    
+    def write_file(self):
+        underdog_team = self.get_underdog()
+        print(f"Underdog team: {underdog_team}")
+        for i in range(len(underdog_team)):
+            f.write(str(underdog_team[i]))
+            f.write(" | ")
+        f.close()
 
 
     
