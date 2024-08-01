@@ -2,15 +2,15 @@ from Splits.Splits import Splits
 import time
 
 def main():
-    inst = Splits()
-    inst.go_to_url()
-    inst.write_file()
-    
-    inst.get_players()
+    with Splits() as bot:
+        bot.go_to_url()
+        bot.write_file()
+        bot.get_players()
 
-    time.sleep(30)
 
-    inst.close()
+        time.sleep(30)
+
+        bot.close()
 
 
 

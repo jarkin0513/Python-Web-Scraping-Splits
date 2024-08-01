@@ -14,9 +14,14 @@ f = open("output.txt", "w")
 
 class Splits(webdriver.Chrome):
 
-    def __init__(self, driver_path="chromedriver.exe"):
+    def __init__(self, driver_path="chromedriver.exe", teardown=False):
         self.driver_path = driver_path        
+        self.teardown = teardown
         super(Splits, self).__init__(options=chrome_options)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.teardown:
+            self.quit()
 
     def go_to_url(self):
         self.get(paths.URL)
@@ -85,6 +90,7 @@ class Splits(webdriver.Chrome):
 
         return underdog_output
     
+    # TODO - Will be updated along the way
     def write_file(self):
         underdog_team = self.get_underdog()
         print(f"Underdog team: {underdog_team}")
