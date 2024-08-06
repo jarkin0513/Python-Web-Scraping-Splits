@@ -8,14 +8,17 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import Splits.Paths as paths
 
-chrome_options= Options()
-chrome_options.add_argument("--start-maximized")
+
 f = open("output.txt", "w")
 
 class Splits(webdriver.Chrome):
 
-    def __init__(self, driver_path="chromedriver.exe", teardown=False):
+    def __init__(self, driver_path="chromedriver.exe", chrome_options=Options(), teardown=False):
         self.driver_path = driver_path        
+        self.chrome_options = chrome_options
+        chrome_options.add_argument("--start-maximized")
+        chrome_options.add_experimental_option("detach", True)
+        chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
         self.teardown = teardown
         super(Splits, self).__init__(options=chrome_options)
 
@@ -24,11 +27,15 @@ class Splits(webdriver.Chrome):
             self.quit()
 
     def go_to_url(self):
+        print(f"Going to {paths.URL} . . .")
+
         self.get(paths.URL)
         WebDriverWait(self, 10).until(
         EC.presence_of_element_located((By.CLASS_NAME, paths.BUTTON_SECTION))
         )
+        print(f"Pulled up {paths.URL}")
 
+        print("Clicking splits . . .")
         time.sleep(2)
 
         self.find_element(By.XPATH, paths.SPLITS_BUTTON_QUERY).click()
@@ -68,6 +75,7 @@ class Splits(webdriver.Chrome):
 
     # Finds unfavored team based on odds
     def get_underdog(self):
+        print("Getting underdog . . .")
 
         underdog_output = []
 

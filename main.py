@@ -1,19 +1,24 @@
 from Splits.Splits import Splits
 import time
+import sys
 
-def main():
-    with Splits() as bot:
-        bot.go_to_url()
-        bot.write_file()
-        bot.get_players()
+def main() -> int:
+    try:
+        with Splits() as bot:
+            bot.go_to_url()
+            bot.write_file()
+            bot.get_players()
 
 
-        time.sleep(30)
+            time.sleep(2)
 
-        bot.close()
-
+            bot.teardown = True
+        return 0
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return -1
 
 
 
 if __name__ == '__main__':
-    main()
+    print("Returned ", main())
