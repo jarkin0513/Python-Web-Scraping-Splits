@@ -214,12 +214,28 @@ class Splits(webdriver.Chrome):
         f.close()
 
     def test(self):
+        lst = []
+
         team_names_span = self.find_elements(By.XPATH, "//span[@class='team-name']")
-        team_odds_span = self.find_elements(By.XPATH, "//div[@class='odds']")
-        for span in team_names_span:
-            print(span.text)
-        for span in team_odds_span:
-            print(span.text)
+        home_team_odds_span = self.find_elements(By.XPATH, "//div[@class='odds']")
+        away_team_odds_span = self.find_elements(By.XPATH, "//div[@class='odds push-right']")
+
+        team_names = [span.text for span in team_names_span]
+        home_team_odds = [span.text for span in home_team_odds_span]
+        away_team_odds = [span.text for span in away_team_odds_span]
+
+        if len(team_names) != (len(home_team_odds) + len(away_team_odds)):
+            print("[ERROR] Number of teams does not match sum of home and away odds")
+            return
+
+        for i in range(len(home_team_odds)): 
+            home_team = ["Home", team_names[2 * i + 1], home_team_odds[i]]
+            away_team = ["Away", team_names[2 * i], away_team_odds[i]]
+            lst.append([home_team, away_team])
+            
+        print(lst)
+
+        
 
         elements = self.find_elements(By.XPATH, paths.TEST1_X)
         actions = AC(self)
