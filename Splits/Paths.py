@@ -23,4 +23,46 @@ AWAY_TEAM_STATS = "//table[contains(@class,'table table-striped')]"
 HOME_TEAM_STATS = "(//table[contains(@class,'table table-striped')]/following::table)[2]"
 
 # Number of total stat sections (Divide by 2 to only get underdogs)
-TEST = "body div.dialog-off-canvas-main-canvas[data-off-canvas-main-canvas=''] div.background.bg-white div.container div.no-gutters.page-content.row div#Main.bg-white.col.homepage.vue-layout div#lineup-app div.match-lineup-wrapper div.ssg-scm.ssg-scm-group-offers div div div.lineup-page-match div.team-title-section"
+NUM = "body div.dialog-off-canvas-main-canvas[data-off-canvas-main-canvas=''] div.background.bg-white div.container div.no-gutters.page-content.row div#Main.bg-white.col.homepage.vue-layout div#lineup-app div.match-lineup-wrapper div.ssg-scm.ssg-scm-group-offers div div div.lineup-page-match div.team-title-section"
+
+# top_left = //table[contains(@class,'table table-striped')]
+#             //table[contains(@class,'table table-striped')]
+# top_right = (//table[contains(@class,'table table-striped')]/following::table)[2]
+#             (//table[contains(@class,'table table-striped')]/following::table)[2]
+
+
+# bottom_left = (//table[contains(@class,'table table-striped')]/following::table)[5]
+#                 (//table[contains(@class,'table table-striped')]/following::table)[5]
+# bottom_right = (//table[contains(@class,'table table-striped')]/following::table)[7]
+
+# last_left = (//table[contains(@class,'table table-striped')]/following::table)[40]
+#             //div[@id='lineup-app']/div[2]/div[1]/div[9]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/table[1]/tbody[1]/tr[1]/td[3]/a[1]
+
+
+AWAY_TEST_CSS = "div.lineup-page-match div.stat-section div.mobile-hidden.projected.table-wrapper.x-scroll div.overflow-container div div table.table.table-striped"
+HOME_TEST_CSS = "div.stat-section div.projected.table-wrapper.x-scroll div.overflow-container div div table.table.table-striped"
+
+
+# Home 2nd row: (//table[contains(@class,'table table-striped')]/following::table)[7]
+# AWAY 2nd row: (//table[contains(@class,'table table-striped')]/following::table)[5]
+
+# home 3rd row: (//table[contains(@class,'table table-striped')]/following::table)[12]
+# away 3rd row: (//table[contains(@class,'table table-striped')]/following::table)[10]
+
+
+TEST_XPATH = "//div[@id='lineup-app']/div[2]/div[1]/div[8]/div[1]/div[1]/div[2]/div[3]/a[1]"
+TEST1_X = "//a[@href='javascript:void(0)' and @class='tabs-btn' and contains(text(), 'Splits')]"
+
+# /html/body/div[@class='dialog-off-canvas-main-canvas']/div[@class='background bg-white']/div[@class='container']/div[@class='page-content row no-gutters']/div[@id='Main']/div[@id='lineup-app']/div[@class='match-lineup-wrapper']/div[@class='ssg-scm ssg-scm-group-offers']/div[1]/div[1]/div[@class='lineup-page-match']/div[@class='team-title-section']/div[@class='team-title away-team-title']/div[@class='title']/span[@class='team-name']
+
+# /html/body/div[@class='dialog-off-canvas-main-canvas']/div[@class='background bg-white']/div[@class='container']/div[@class='page-content row no-gutters']/div[@id='Main']/div[@id='lineup-app']/div[@class='match-lineup-wrapper']/div[@class='ssg-scm ssg-scm-group-offers']/div[2]/div/div[@class='lineup-page-match']/div[@class='team-title-section']/div[@class='team-title away-team-title']/div[@class='title']/span[@class='team-name']
+
+AWAY_NAME_XPATH = "//span[@class='team-name']"
+HOME_NAME_XPATH = "(//span[@class='team-name'])[2]"
+
+#2nd row away     (//span[@class='team-name'])[3]
+
+# //div[@id='lineup-app']/div[2]/div[1]/div[4]/div[1]/div[1]/div[1]/div[1]/div[1]/span[1]
+
+# //div[@id='lineup-app']/div[2]/div[1]/div[4]/div[1]/div[1]/div[1]/div[3]/div[2]/span[1]
+
