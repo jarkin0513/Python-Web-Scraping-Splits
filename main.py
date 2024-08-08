@@ -5,7 +5,8 @@ def main() -> int:
     try:
         with Splits() as bot:
             bot.go_to_url()
-            bot.test()
+            # bot.get_team_pairs()
+            bot.get_underdogs()
             # bot.get_num_teams()
             # bot.write_file()
             # bot.get_players()
