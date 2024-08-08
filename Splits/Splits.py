@@ -88,29 +88,31 @@ class Splits(webdriver.Chrome):
         pass
 
     # Finds unfavored team based on odds
-    def get_underdog(self, away_path, home_path):
-        print("[INFO] Getting underdog . . .")
+    def get_underdogs(self):
+        print("[INFO] Getting underdogs . . .")
 
-        underdog_output = []
+        team_pairs = self.get_team_pairs()
+        underdogs_output = []
 
-        home_team_name = self.find_element(By.XPATH, paths.HOME_TEAM_NAME).text
-        home_team_odds = int(self.find_element(By.XPATH, paths.HOME_TEAM_ODDS).text)
+        for i in range(len(team_pairs)):
+            lst = []
+            if int(team_pairs[i][0][2]) > int(team_pairs[i][1][2]):
+                underdog_name = team_pairs[i][0][1]
+                underdog_odds = team_pairs[i][0][2] 
+                lst = ['| Home', underdog_name, underdog_odds]
+                underdogs_output.append(lst)
 
-        away_team_name = self.find_element(By.XPATH, paths.AWAY_TEAM_NAME).text
-        away_team_odds = int(self.find_element(By.XPATH, paths.AWAY_TEAM_ODDS).text)
+            else:
+                underdog_name = team_pairs[i][1][1]
+                underdog_odds = team_pairs[i][1][2] 
+                lst = ['| Away', underdog_name, underdog_odds]
+                underdogs_output.append(lst)
 
-        underdog_output.append('| Home')
-        underdog_name = home_team_name
-        underdog_odds = home_team_odds
-        if away_team_odds < home_team_odds:
-            underdog_output[0] = '| Away'
-            underdog_name = away_team_name
-            underdog_odds = away_team_odds
+        print(underdogs_output)
+        print(len(underdogs_output))
 
-        underdog_output.append(underdog_name)
-        underdog_output.append(underdog_odds)
-
-        return underdog_output
+        print("[INFO] Got underdogs")
+        return underdogs_output
     
 
     # Finds the number of teams to index through 
@@ -213,8 +215,9 @@ class Splits(webdriver.Chrome):
             f.write(" | ")
         f.close()
 
-    def test(self):
-        lst = []
+    def get_team_pairs(self):
+        print("[INFO] Grabbing team pairs . . .")
+        team_pairs = []
 
         team_names_span = self.find_elements(By.XPATH, "//span[@class='team-name']")
         home_team_odds_span = self.find_elements(By.XPATH, "//div[@class='odds']")
@@ -229,19 +232,29 @@ class Splits(webdriver.Chrome):
             return
 
         for i in range(len(home_team_odds)): 
-            home_team = ["Home", team_names[2 * i + 1], home_team_odds[i]]
-            away_team = ["Away", team_names[2 * i], away_team_odds[i]]
-            lst.append([home_team, away_team])
+            if self.is_castable_to_int(home_team_odds[i]) and self.is_castable_to_int(away_team_odds[i]):
+                home_team = ["Home", team_names[2 * i + 1], home_team_odds[i]]
+                away_team = ["Away", team_names[2 * i], away_team_odds[i]]
+                team_pairs.append([home_team, away_team])
+            else:
+                print(f"[WARNING] Team(s) in game {i + 1} does not have odds listed (Ignoring)")
             
-        print(lst)
-
-        
-
         elements = self.find_elements(By.XPATH, paths.TEST1_X)
         actions = AC(self)
         for element in elements:
             actions.move_to_element(element).perform()
             element.click()
-            time.sleep(2)
+            # time.sleep(2)
+
+        print("[INFO] Grabbed team pairs")
+        # print(team_pairs)
+        return team_pairs
+    
+    def is_castable_to_int(self, value):
+        try:
+            int(value)
+            return True
+        except ValueError:
+            return False
 
     
