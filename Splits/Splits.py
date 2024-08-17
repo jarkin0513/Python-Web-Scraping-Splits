@@ -262,7 +262,7 @@ class Splits(webdriver.Chrome):
     def get_stats_span(self):
         print("[INFO] Getting stats span . . .")
         stats_span = []
-        stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPANgity )
+        stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
 
         # Filter out pitchers
         unwanted_keywords = ['OPP PITCHER']
