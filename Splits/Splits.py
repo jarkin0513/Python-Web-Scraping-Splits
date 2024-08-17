@@ -28,7 +28,7 @@ class Splits(webdriver.Chrome):
         if self.teardown:
             self.quit()
 
-    # Pulls up specified URL and attempts to click 'Splits' button 
+    # Pulls up specified URL and attempts to click 'Splits' buttons
     def go_to_url(self):
         try:
             print(f"[INFO] Going to {paths.URL} . . .")
@@ -46,7 +46,11 @@ class Splits(webdriver.Chrome):
             print("[INFO] Clicking splits . . .")
             time.sleep(2)
 
-            self.find_element(By.XPATH, paths.SPLITS_BUTTON_QUERY).click()
+            elements = self.find_elements(By.XPATH, paths.SPLITS_BUTTONS_QUERY)
+            actions = AC(self)
+            for element in elements:
+                actions.move_to_element(element).perform()
+                element.click()
             print("[INFO] Clicked splits")
 
         except Exception as e_splits:
@@ -99,17 +103,19 @@ class Splits(webdriver.Chrome):
             if int(team_pairs[i][0][2]) > int(team_pairs[i][1][2]):
                 underdog_name = team_pairs[i][0][1]
                 underdog_odds = team_pairs[i][0][2] 
-                lst = ['| Home', underdog_name, underdog_odds]
+                game_index = team_pairs[i][0][3]
+                lst = ['| Home', underdog_name, underdog_odds, game_index]
                 underdogs_output.append(lst)
 
             else:
                 underdog_name = team_pairs[i][1][1]
                 underdog_odds = team_pairs[i][1][2] 
-                lst = ['| Away', underdog_name, underdog_odds]
+                game_index = team_pairs[i][1][3]
+                lst = ['| Away', underdog_name, underdog_odds, game_index]
                 underdogs_output.append(lst)
 
         print(underdogs_output)
-        print(len(underdogs_output))
+        # print(len(underdogs_output))
 
         print("[INFO] Got underdogs")
         return underdogs_output
@@ -219,9 +225,9 @@ class Splits(webdriver.Chrome):
         print("[INFO] Grabbing team pairs . . .")
         team_pairs = []
 
-        team_names_span = self.find_elements(By.XPATH, "//span[@class='team-name']")
-        home_team_odds_span = self.find_elements(By.XPATH, "//div[@class='odds']")
-        away_team_odds_span = self.find_elements(By.XPATH, "//div[@class='odds push-right']")
+        team_names_span = self.find_elements(By.XPATH, paths.TEAMS_NAME_SPAN)
+        home_team_odds_span = self.find_elements(By.XPATH, paths.HOME_TEAM_ODDS_SPAN)
+        away_team_odds_span = self.find_elements(By.XPATH, paths.AWAY_TEAM_ODDS_SPAN)
 
         team_names = [span.text for span in team_names_span]
         home_team_odds = [span.text for span in home_team_odds_span]
@@ -233,18 +239,19 @@ class Splits(webdriver.Chrome):
 
         for i in range(len(home_team_odds)): 
             if self.is_castable_to_int(home_team_odds[i]) and self.is_castable_to_int(away_team_odds[i]):
-                home_team = ["Home", team_names[2 * i + 1], home_team_odds[i]]
-                away_team = ["Away", team_names[2 * i], away_team_odds[i]]
+                home_team = ["Home", team_names[2 * i + 1], home_team_odds[i], i]
+                away_team = ["Away", team_names[2 * i], away_team_odds[i], i]
                 team_pairs.append([home_team, away_team])
             else:
                 print(f"[WARNING] Team(s) in game {i + 1} does not have odds listed (Ignoring)")
             
-        elements = self.find_elements(By.XPATH, paths.TEST1_X)
-        actions = AC(self)
-        for element in elements:
-            actions.move_to_element(element).perform()
-            element.click()
+        
             # time.sleep(2)
+
+        # stats_elements1 = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
+        # stats = [span.text for span in stats_elements1]
+        # print(stats)
+       
 
         print("[INFO] Grabbed team pairs")
         # print(team_pairs)
@@ -256,5 +263,78 @@ class Splits(webdriver.Chrome):
             return True
         except ValueError:
             return False
+        
+    def get_stats(self):
+        underdogs = self.get_underdogs()
+        stats = self.get_stats_span()
+
+        selected_stats = []
+
+        # for team in underdogs:
+        #     home_or_away = team[0]
+        #     if home_or_away == "| Away":
+        #         selected_stats = stats[]
+
+# Pitcher stats always odd indexes
+        lst = []
+        for i in range(0, len(stats), 2):
+            print(stats[i])
+            
+
+
+    def get_stats_span(self):
+        print("In get stats span")
+        stats_span = []
+        stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
+
+        # Filter out pitchers
+        unwanted_keywords = ['OPP PITCHER']
+        filtered_stats = []
+
+        try:
+
+            # for element in stats:
+            #     element_text = element.text
+            #     if not any(keyword in element_text for keyword in unwanted_keywords):
+            #         filtered_stats.append(element_text)
+            filtered_stats = [element.text for element in stats if not any(keyword in element.text for keyword in unwanted_keywords)]
+            # print(filtered_stats)
+        except Exception as e:
+            print(f"Error occured: {e}")
+
+        for i in range(0, len(filtered_stats), 2):
+            team_pair = []
+            if i < len(filtered_stats):
+                away_team = filtered_stats[i]
+                team_pair.append([away_team])
+            if i + 1 < len(filtered_stats):
+                home_team = filtered_stats[i + 1]
+                team_pair.append([home_team])
+
+            stats_span.append(team_pair)
+
+
+            # element_text = element.text
+            # stats_span.append([element_text])
+
+        print(stats_span)
+        return stats_span
+    
+    def test(self):
+        print("In test")
+        stats_span = []
+        # stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
+        stats = WebDriverWait(self, 10).until(
+            EC.presence_of_all_elements_located((By.XPATH, paths.ALL_STATS_SPAN))
+        )
+
+        for i, element in enumerate(stats):
+            print(f"Element {i}: Type={type(element)}, Text={getattr(element, 'text', 'No text attribute')}")
+
+
+        for element in stats:
+            stats_span.append([element.text])
+        
+        print(stats_span)
 
     
