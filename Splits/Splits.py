@@ -56,9 +56,9 @@ class Splits(webdriver.Chrome):
         except Exception as e_splits:
             print(f"[ERROR] Failed to click 'Splits' element", e_splits)
 
-    def get_players(self):
-        lst = self.get_team_stats()
-        print(lst[1:])
+    # def get_players(self):
+    #     lst = self.get_team_stats()
+    #     print(lst[1:])
 
     def get_team_stats(self):
         num_of_teams = self.get_num_teams() / 2
@@ -283,7 +283,7 @@ class Splits(webdriver.Chrome):
 
 
     def get_stats_span(self):
-        print("In get stats span")
+        print("[INFO] Getting stats span . . .")
         stats_span = []
         stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
 
@@ -307,8 +307,85 @@ class Splits(webdriver.Chrome):
 
             stats_span.append(team_pair)
 
-        print(stats_span)
+        # print(stats_span)
+        print("[INFO] Got stats span")
         return stats_span
+    
+    def get_underdog_team_stats(self):
+        underdogs = self.get_underdogs()
+        stats = self.get_stats_span()
+
+        team_stats = []
+
+        for i in range(0, len(stats)):
+            for team in underdogs:
+                if team[0] == '| Home':
+                    home_final = [team[1], stats[i][1]]
+                    team_stats.append(home_final)
+                elif team[0] == '| Away':
+                    away_final = [team[1], stats[i][0]]
+                    team_stats.append(away_final)
+
+        # print(team_stats)
+
+        player_stats = []
+
+        for team in team_stats:
+            team_name = team[0]
+            player_data = team[1]
+
+            team_player_stats = []
+
+            for stats_string in player_data:
+                player_lines = stats_string.split('\n')
+
+                for line in player_lines:
+                    if line.strip() and not line.startswith("#"):
+                        parts = line.split()
+                        player_name = " ".join(parts[1:-5])
+                        ab = parts[-5]
+                        hr = parts[-3]
+                        avg = parts[-1]
+
+                        team_player_stats.append({
+                            'Player': player_name,
+                            'AB': ab,
+                            'HR': hr,
+                            'AVG': avg
+                        })
+
+            player_stats.append({
+                'Team': team_name,
+                'Players': team_player_stats
+            })
+
+        print(player_stats)
+        return player_stats
+    
+    def get_final_players(self, threshold_ab, threshold_hr, threshold_avg):
+        player_stats = self.get_underdog_team_stats()
+
+        players_meeting_threshold = []
+
+        for team in player_stats:
+            team_name = team['Team']
+            stats = team['Players']
+
+            for player in stats:
+                ab = int(player['AB'])
+                hr = int(player['HR'])
+                avg = player['AVG']
+
+                if ab >= threshold_ab and hr < threshold_hr and avg <= threshold_avg:
+                    players_meeting_threshold.append(player['Player'])
+
+        print(players_meeting_threshold)
+        return players_meeting_threshold
+
+
+
+
+        
     
     def test(self):
         print("In test")
