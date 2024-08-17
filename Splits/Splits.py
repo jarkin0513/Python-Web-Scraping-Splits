@@ -292,13 +292,7 @@ class Splits(webdriver.Chrome):
         filtered_stats = []
 
         try:
-
-            # for element in stats:
-            #     element_text = element.text
-            #     if not any(keyword in element_text for keyword in unwanted_keywords):
-            #         filtered_stats.append(element_text)
             filtered_stats = [element.text for element in stats if not any(keyword in element.text for keyword in unwanted_keywords)]
-            # print(filtered_stats)
         except Exception as e:
             print(f"Error occured: {e}")
 
@@ -312,10 +306,6 @@ class Splits(webdriver.Chrome):
                 team_pair.append([home_team])
 
             stats_span.append(team_pair)
-
-
-            # element_text = element.text
-            # stats_span.append([element_text])
 
         print(stats_span)
         return stats_span
