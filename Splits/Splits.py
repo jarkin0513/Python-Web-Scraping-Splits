@@ -51,7 +51,9 @@ class Splits(webdriver.Chrome):
             for element in elements:
                 actions.move_to_element(element).perform()
                 element.click()
+            actions.scroll_by_amount(0, 1000).perform()
             print("[INFO] Clicked splits")
+            time.sleep(2)
 
         except Exception as e_splits:
             print(f"[ERROR] Failed to click 'Splits' element", e_splits)
@@ -244,17 +246,9 @@ class Splits(webdriver.Chrome):
                 team_pairs.append([home_team, away_team])
             else:
                 print(f"[WARNING] Team(s) in game {i + 1} does not have odds listed (Ignoring)")
-            
-        
-            # time.sleep(2)
-
-        # stats_elements1 = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
-        # stats = [span.text for span in stats_elements1]
-        # print(stats)
-       
 
         print("[INFO] Grabbed team pairs")
-        # print(team_pairs)
+        print(team_pairs)
         return team_pairs
     
     def is_castable_to_int(self, value):
@@ -263,29 +257,12 @@ class Splits(webdriver.Chrome):
             return True
         except ValueError:
             return False
-        
-    def get_stats(self):
-        underdogs = self.get_underdogs()
-        stats = self.get_stats_span()
 
-        selected_stats = []
-
-        # for team in underdogs:
-        #     home_or_away = team[0]
-        #     if home_or_away == "| Away":
-        #         selected_stats = stats[]
-
-# Pitcher stats always odd indexes
-        lst = []
-        for i in range(0, len(stats), 2):
-            print(stats[i])
             
-
-
     def get_stats_span(self):
         print("[INFO] Getting stats span . . .")
         stats_span = []
-        stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
+        stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPANgity )
 
         # Filter out pitchers
         unwanted_keywords = ['OPP PITCHER']
@@ -307,24 +284,53 @@ class Splits(webdriver.Chrome):
 
             stats_span.append(team_pair)
 
-        # print(stats_span)
+        
+        print(stats_span)
+        print(len(stats))
         print("[INFO] Got stats span")
         return stats_span
     
     def get_underdog_team_stats(self):
         underdogs = self.get_underdogs()
+        # print(underdogs)
+        print()
         stats = self.get_stats_span()
+        # print(stats)
+        print(len(stats))
 
         team_stats = []
 
-        for i in range(0, len(stats)):
+        for i, team_pair in enumerate(stats):
+            # print(i)
+            if len(team_pair) < 2:
+                continue
+
+            # print(team_pair)
+
+            away_stat = team_pair[0]
+            home_stat = team_pair[1]
+
+            # if i + 1 < len(stats):
+            #     home_stat = stats[i + 1]
+            #     away_stat = stats[i]
+
             for team in underdogs:
                 if team[0] == '| Home':
-                    home_final = [team[1], stats[i][1]]
+                    home_final = [team[1], home_stat]
                     team_stats.append(home_final)
                 elif team[0] == '| Away':
-                    away_final = [team[1], stats[i][0]]
+                    away_final = [team[1], away_stat[i][0]]
                     team_stats.append(away_final)
+            # print(team_stats)
+
+        # for i in range(0, len(stats)):
+        #     for team in underdogs:
+        #         if team[0] == '| Home':
+        #             home_final = [team[1], stats[i][1]]
+        #             team_stats.append(home_final)
+        #         elif team[0] == '| Away':
+        #             away_final = [team[1], stats[i][0]]
+        #             team_stats.append(away_final)
 
         # print(team_stats)
 
@@ -354,33 +360,53 @@ class Splits(webdriver.Chrome):
                             'AVG': avg
                         })
 
+                        # Check for duplicates
+                        if not any(player['Player'] == player_name for player in team_player_stats):
+                            team_player_stats.append({
+                                'Player': player_name,
+                                'AB': ab,
+                                'HR': hr,
+                                'AVG': avg
+                            })
+
             player_stats.append({
                 'Team': team_name,
                 'Players': team_player_stats
             })
 
         print(player_stats)
+        print("\n\n")
         return player_stats
     
     def get_final_players(self, threshold_ab, threshold_hr, threshold_avg):
+        # player_stats = [{'Team': 'Pirates', 'Players': [{'Player': 'Jose Asuna ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Ji Hwan Bae (L)', 'AB': '1', 'HR': '0', 'AVG': '.000'}, {'Player': 'Joey Bart (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Jack Brannigan ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Oneil Cruz (L)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Bryan De La Cruz (R)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Yasmani Grandal (B)', 'AB': '16', 'HR': '2', 'AVG': '.375'}, {'Player': "Ke'Bryan Hayes (R)", 'AB': '9', 'HR': '0', 'AVG': '.222'}, {'Player': 'Connor Joe (R)', 'AB': '5', 'HR': '0', 'AVG': '.400'}, {'Player': 'Isiah Kiner-Falefa (R)', 'AB': '8', 'HR': '0', 'AVG': '.375'}, {'Player': 'Grant Koch (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Andrew McCutchen (R)', 'AB': '11', 'HR': '0', 'AVG': '.091'}, {'Player': 'Bryan Reynolds (B)', 'AB': '11', 'HR': '0', 'AVG': '.000'}, {'Player': 'Michael A. Taylor (R)', 'AB': '3', 'HR': '1', 'AVG': '.333'}, {'Player': 'Rowdy Tellez (L)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Jared Triolo (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}]}, {'Team': 'Tigers', 'Players': [{'Player': 'Jose Asuna ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Ji Hwan Bae (L)', 'AB': '1', 'HR': '0', 'AVG': '.000'}, {'Player': 'Joey Bart (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Jack Brannigan ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Oneil Cruz (L)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Bryan De La Cruz (R)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Yasmani Grandal (B)', 'AB': '16', 'HR': '2', 'AVG': '.375'}, {'Player': "Ke'Bryan Hayes (R)", 'AB': '9', 'HR': '0', 'AVG': '.222'}, {'Player': 'Connor Joe (R)', 'AB': '5', 'HR': '0', 'AVG': '.400'}, {'Player': 'Isiah Kiner-Falefa (R)', 'AB': '8', 'HR': '0', 'AVG': '.375'}, {'Player': 'Grant Koch (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Andrew McCutchen (R)', 'AB': '11', 'HR': '0', 'AVG': '.091'}, {'Player': 'Bryan Reynolds (B)', 'AB': '11', 'HR': '0', 'AVG': '.000'}, {'Player': 'Michael A. Taylor (R)', 'AB': '3', 'HR': '1', 'AVG': '.333'}, {'Player': 'Rowdy Tellez (L)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Jared Triolo (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}]}]
         player_stats = self.get_underdog_team_stats()
+        # print(player_stats)
+        print("\n\n")
 
-        players_meeting_threshold = []
+        players_meeting_threshold = set() # Avoid duplicates
 
         for team in player_stats:
             team_name = team['Team']
             stats = team['Players']
-
+            # print(f"Team: {team_name}")
             for player in stats:
-                ab = int(player['AB'])
-                hr = int(player['HR'])
-                avg = player['AVG']
+                try:
+                    # print(f"Player: {player['Player']}")
+                    ab = int(player['AB'])
+                    hr = int(player['HR'])
+                    avg = float(player['AVG'])
 
-                if ab >= threshold_ab and hr < threshold_hr and avg <= threshold_avg:
-                    players_meeting_threshold.append(player['Player'])
+                    if ab >= threshold_ab and hr < threshold_hr and avg <= threshold_avg:
+                        players_meeting_threshold.add(
+                            (team_name, player['Player'])
+                        )
 
-        print(players_meeting_threshold)
-        return players_meeting_threshold
+                except ValueError as e:
+                    print(f"Eror processing player data: {e}, player info: {player}")
+
+        print(list(players_meeting_threshold)[:100])
+        return list(players_meeting_threshold)
 
 
 
