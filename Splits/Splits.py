@@ -146,8 +146,6 @@ class Splits(webdriver.Chrome):
         #     print(filtered_stats[i])
 
         for i in range(0, len(filtered_stats), 2):
-            print(f"pairs count: {pairs_count}")
-            print(f"num games: {num_games}")
             if pairs_count >= num_games:
                 break
 
@@ -166,75 +164,46 @@ class Splits(webdriver.Chrome):
         # print(stats_span)
         # print(len(stats_span))
         print("[INFO] Got stats span")
-        for pair in stats_span:
-            print(f"{pair}\n")
+        # for pair in stats_span:
+        #     print(f"{pair}\n")
         return stats_span
     
     def get_underdog_team_stats(self):
-        # actions = AC(self)
-        # actions.scroll_by_amount(0, 1000).perform()
-        # time.sleep(2)
-
         underdogs = self.get_underdogs()
-        # print(underdogs)
-
         stats = self.get_stats_span()
+        # stats = paths.TEST_STATS
         # for pair in stats:
         #     print(f"{pair} \n")
-            
-        # print(stats[0])
-        # print(len(stats))
 
         team_stats = []
 
-        for i, team_pair in enumerate(stats):
-            # print(i)
-            # print(team_pair)
-            if len(team_pair) < 2:
-                continue
-
-        #     # print(team_pair)
-
-            away_stat = team_pair[0]
-            home_stat = team_pair[1]
-
-        #     # if i + 1 < len(stats):
-        #     #     home_stat = stats[i + 1]
-        #     #     away_stat = stats[i]
-
-            for team in underdogs:
-                if team[0] == '| Home':
-                    home_final = [team[1], home_stat]
-                    team_stats.append(home_final)
-                elif team[0] == '| Away':
-                    away_final = [team[1], away_stat[i][0]]
-                    team_stats.append(away_final)
-        
-        print(team_stats)
-
-        # for i in range(0, len(stats)):
-        #     for team in underdogs:
-        #         if team[0] == '| Home':
-        #             home_final = [team[1], stats[i][1]]
-        #             team_stats.append(home_final)
-        #         elif team[0] == '| Away':
-        #             away_final = [team[1], stats[i][0]]
-        #             team_stats.append(away_final)
-
-        # print(team_stats)
+        for i in range(len(stats)):
+            if underdogs[i][0] == '| Home':
+                team_stats.append([underdogs[i][1], stats[i][1]])
+                print(f"{stats[i][1]} \n")
+            elif underdogs[i][0] == '| Away':
+                team_stats.append([underdogs[i][1], stats[i][0]])
+                print(f"{stats[i][0]} \n")
+        print(len(team_stats))
 
         player_stats = []
 
-        for team in team_stats:
-            team_name = team[0]
-            player_data = team[1]
+        for i in range(len(team_stats)):
+            print(i)
+            team_name = team_stats[i][0]
+            player_data = team_stats[i][1]
+            print(f"Team: {team_name} Player Data: {player_data}")
 
-            team_player_stats = []
+            team_player_stats = {
+                'Team': team_name,
+                'Players': []
+            }
 
             for stats_string in player_data:
                 player_lines = stats_string.split('\n')
 
                 for line in player_lines:
+                    # print(line)
                     if line.strip() and not line.startswith("#"):
                         parts = line.split()
                         player_name = " ".join(parts[1:-5])
@@ -242,104 +211,21 @@ class Splits(webdriver.Chrome):
                         hr = parts[-3]
                         avg = parts[-1]
 
-                        team_player_stats.append({
-                            'Player': player_name,
-                            'AB': ab,
-                            'HR': hr,
-                            'AVG': avg
-                        })
-
                         # # Check for duplicates
-                        # if not any(player['Player'] == player_name for player in team_player_stats):
-                        #     team_player_stats.append({
-                        #         'Player': player_name,
-                        #         'AB': ab,
-                        #         'HR': hr,
-                        #         'AVG': avg
-                        #     })
-            unique_players = {}
-            for player in team_player_stats:
-                unique_players[player['Player']] = player
+                        if not any(player['Player'] == player_name for player in team_player_stats['Players']):
+                            team_player_stats['Players'].append({
+                                'Player': player_name,
+                                'AB': ab,
+                                'HR': hr,
+                                'AVG': avg
+                            })
 
-            player_stats.append({
-                'Team': team_name,
-                'Players': list(unique_players.values())      #team_player_stats
-            })
+            player_stats.append(team_player_stats)
 
-        # print(player_stats)
         print("\n\n")
+        print(player_stats)
         return player_stats
     
-    def get_underdog_team_stats1(self):
-        underdogs = self.get_underdogs()
-        # print(underdogs)
-        stats = self.get_stats_span()
-        print(stats)
-        print(len(stats[0]))
-
-        team_stats = []
-
-        for team in underdogs:
-
-            away_stat = team_pair[0]
-            home_stat = team_pair[1]
-
-            for team in underdogs:
-                if team[0] == '| Home':
-                    home_final = [team[1], home_stat]
-                    team_stats.append(home_final)
-                elif team[0] == '| Away':
-                    away_final = [team[1], away_stat[i][0]]
-                    team_stats.append(away_final)
-        
-        print(team_stats)
-
-        player_stats = []
-
-        for team in team_stats:
-            team_name = team[0]
-            player_data = team[1]
-
-            team_player_stats = []
-
-            for stats_string in player_data:
-                player_lines = stats_string.split('\n')
-
-                for line in player_lines:
-                    if line.strip() and not line.startswith("#"):
-                        parts = line.split()
-                        player_name = " ".join(parts[1:-5])
-                        ab = parts[-5]
-                        hr = parts[-3]
-                        avg = parts[-1]
-
-                        team_player_stats.append({
-                            'Player': player_name,
-                            'AB': ab,
-                            'HR': hr,
-                            'AVG': avg
-                        })
-
-                        # # Check for duplicates
-                        # if not any(player['Player'] == player_name for player in team_player_stats):
-                        #     team_player_stats.append({
-                        #         'Player': player_name,
-                        #         'AB': ab,
-                        #         'HR': hr,
-                        #         'AVG': avg
-                        #     })
-            unique_players = {}
-            for player in team_player_stats:
-                unique_players[player['Player']] = player
-
-            player_stats.append({
-                'Team': team_name,
-                'Players': list(unique_players.values())      #team_player_stats
-            })
-
-        # print(player_stats)
-        print("\n\n")
-        return player_stats
     
     def get_final_players(self, threshold_ab, threshold_hr, threshold_avg):
         # player_stats = [{'Team': 'Pirates', 'Players': [{'Player': 'Jose Asuna ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Ji Hwan Bae (L)', 'AB': '1', 'HR': '0', 'AVG': '.000'}, {'Player': 'Joey Bart (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Jack Brannigan ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Oneil Cruz (L)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Bryan De La Cruz (R)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Yasmani Grandal (B)', 'AB': '16', 'HR': '2', 'AVG': '.375'}, {'Player': "Ke'Bryan Hayes (R)", 'AB': '9', 'HR': '0', 'AVG': '.222'}, {'Player': 'Connor Joe (R)', 'AB': '5', 'HR': '0', 'AVG': '.400'}, {'Player': 'Isiah Kiner-Falefa (R)', 'AB': '8', 'HR': '0', 'AVG': '.375'}, {'Player': 'Grant Koch (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Andrew McCutchen (R)', 'AB': '11', 'HR': '0', 'AVG': '.091'}, {'Player': 'Bryan Reynolds (B)', 'AB': '11', 'HR': '0', 'AVG': '.000'}, {'Player': 'Michael A. Taylor (R)', 'AB': '3', 'HR': '1', 'AVG': '.333'}, {'Player': 'Rowdy Tellez (L)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Jared Triolo (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}]}, {'Team': 'Tigers', 'Players': [{'Player': 'Jose Asuna ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Ji Hwan Bae (L)', 'AB': '1', 'HR': '0', 'AVG': '.000'}, {'Player': 'Joey Bart (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Jack Brannigan ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Oneil Cruz (L)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Bryan De La Cruz (R)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Yasmani Grandal (B)', 'AB': '16', 'HR': '2', 'AVG': '.375'}, {'Player': "Ke'Bryan Hayes (R)", 'AB': '9', 'HR': '0', 'AVG': '.222'}, {'Player': 'Connor Joe (R)', 'AB': '5', 'HR': '0', 'AVG': '.400'}, {'Player': 'Isiah Kiner-Falefa (R)', 'AB': '8', 'HR': '0', 'AVG': '.375'}, {'Player': 'Grant Koch (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Andrew McCutchen (R)', 'AB': '11', 'HR': '0', 'AVG': '.091'}, {'Player': 'Bryan Reynolds (B)', 'AB': '11', 'HR': '0', 'AVG': '.000'}, {'Player': 'Michael A. Taylor (R)', 'AB': '3', 'HR': '1', 'AVG': '.333'}, {'Player': 'Rowdy Tellez (L)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Jared Triolo (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}]}]
@@ -368,7 +254,7 @@ class Splits(webdriver.Chrome):
                 except ValueError as e:
                     print(f"Eror processing player data: {e}, player info: {player}")
 
-        print(list(players_meeting_threshold)[:100])
+        print(list(players_meeting_threshold))
         return list(players_meeting_threshold)
 
     
@@ -392,34 +278,45 @@ class Splits(webdriver.Chrome):
 
     def scroll_collect_elements(self):
         num_games = self.get_num_games()
+        count = 0
         all_table_elements = []
         seen_positions = set()
 
         prev_height = self.execute_script("return document.body.scrollHeight")
 
         print("[INFO] Clicking splits . . .")
-        while True:
+        while count < num_games:
             self.execute_script("window.scrollTo(0, document.body.scrollHeight)")
             # time.sleep(2)
 
+            # buttons = WebDriverWait(self, 10).until(
+            #     EC.presence_of_all_elements_located((By.XPATH, paths.SPLITS_BUTTONS_QUERY))
+            # )
             buttons = self.find_elements(By.XPATH, paths.SPLITS_BUTTONS_QUERY)
             actions = AC(self)
             for button in buttons:
                 try:
                     actions.move_to_element(button).perform()
-                    button.click()
-                    time.sleep(1)
+                    if button.text == 'Splits' and 'active' not in button.get_attribute("class"):
+                        print("[INFO] Splits button not pressed, clicking")
+                        button.click()
+                        time.sleep(1)
+                    count += 1
+                    print(count)
 
                     table_elements = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
                     for table in table_elements:
-                        table_position = tuple(table.location.values())
-                        if table.text not in all_table_elements and table_position not in seen_positions:
-                            all_table_elements.append(table.text)
-                            seen_positions.add(table_position)
+                        # table_position = tuple(table.location.values())
+                        # if table.text not in all_table_elements and table_position not in seen_positions:
+                        all_table_elements.append(table.text)
+                        #     all_table_elements.append(table.text)
+                        #     seen_positions.add(table_position)
                             
 
                 except Exception as e:
                     print(f"Error interacting with button: {e}")
+
+            
 
             #   Check the new scroll height after scrolling
             new_height = self.execute_script("return document.body.scrollHeight")
@@ -435,5 +332,72 @@ class Splits(webdriver.Chrome):
         #     print(element.text)
         # print(f"Collected {len(all_table_elements)} elements")
         return all_table_elements
+    
+
+    def test3(self):
+        # actions = AC(self)
+        # actions.scroll_by_amount(0, 1000).perform()
+        # time.sleep(2)
+
+        underdogs = self.get_underdogs()
+        # print(underdogs)
+
+        stats = self.get_stats_span()
+        # stats = paths.TEST_STATS
+        print(len(stats))
+        # for pair in stats:
+        #     print(f"{pair} \n")
+
+        team_stats = []
+
+        for i in range(len(stats)):
+            if underdogs[i][0] == '| Home':
+                team_stats.append([underdogs[i][1], stats[i][1]])
+                print(f"{stats[i][1]} \n")
+            elif underdogs[i][0] == '| Away':
+                team_stats.append([underdogs[i][1], stats[i][0]])
+                print(f"{stats[i][0]} \n")
+        print(len(team_stats))
+
+        player_stats = []
+
+        for i in range(len(team_stats)):
+            print(i)
+            team_name = team_stats[i][0]
+            player_data = team_stats[i][1]
+            print(f"Team: {team_name} Player Data: {player_data}")
+
+            team_player_stats = {
+                'Team': team_name,
+                'Players': []
+            }
+
+            for stats_string in player_data:
+                player_lines = stats_string.split('\n')
+
+                for line in player_lines:
+                    # print(line)
+                    if line.strip() and not line.startswith("#"):
+                        parts = line.split()
+                        player_name = " ".join(parts[1:-5])
+                        ab = parts[-5]
+                        hr = parts[-3]
+                        avg = parts[-1]
+
+                        # # Check for duplicates
+                        if not any(player['Player'] == player_name for player in team_player_stats['Players']):
+                            team_player_stats['Players'].append({
+                                'Player': player_name,
+                                'AB': ab,
+                                'HR': hr,
+                                'AVG': avg
+                            })
+
+            player_stats.append(team_player_stats)
+
+        print("\n\n")
+        print(player_stats)
+        return player_stats
+   
     
     
