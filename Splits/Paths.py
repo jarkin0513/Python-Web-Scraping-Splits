@@ -2,7 +2,6 @@ URL = "https://www.fantasyalarm.com/mlb/lineups"
 
 BUTTON_SECTION = "tool-btn-section"
 
-SPLITS_BUTTON_QUERY = "//div[@id='lineup-app']/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[3]/a[1]"
 
 HOME_TEAM_NAME = "/html/body/div[@class='dialog-off-canvas-main-canvas']/div[@class='background bg-white']/div[@class='container']/div[@class='page-content row no-gutters']/div[@id='Main']/div[@id='lineup-app']/div[@class='match-lineup-wrapper']/div[@class='ssg-scm ssg-scm-group-offers']/div[1]/div[1]/div[@class='lineup-page-match']/div[@class='team-title-section']/div[@class='team-title home-team-title']/div[@class='title push-right']/span[@class='team-name']"
 
@@ -52,6 +51,8 @@ HOME_TEST_CSS = "div.stat-section div.projected.table-wrapper.x-scroll div.overf
 
 TEST_XPATH = "//div[@id='lineup-app']/div[2]/div[1]/div[8]/div[1]/div[1]/div[2]/div[3]/a[1]"
 SPLITS_BUTTONS_QUERY = "//a[@href='javascript:void(0)' and contains(@class, 'tabs-btn') and contains(text(), 'Splits')]"
+# "//a[@href='javascript:void(0)' and @class='tabs-btn' and contains(text(), 'Splits')]"
+
 
 # /html/body/div[@class='dialog-off-canvas-main-canvas']/div[@class='background bg-white']/div[@class='container']/div[@class='page-content row no-gutters']/div[@id='Main']/div[@id='lineup-app']/div[@class='match-lineup-wrapper']/div[@class='ssg-scm ssg-scm-group-offers']/div[1]/div[1]/div[@class='lineup-page-match']/div[@class='team-title-section']/div[@class='team-title away-team-title']/div[@class='title']/span[@class='team-name']
 
