@@ -42,23 +42,7 @@ class Splits(webdriver.Chrome):
         except Exception as e_url:
             print(f"[ERROR] Failed to go to: {paths.URL}", e_url)
 
-        try:
-            print("[INFO] Clicking splits . . .")
-            time.sleep(2)
-
-            elements = self.find_elements(By.XPATH, paths.SPLITS_BUTTONS_QUERY)
-            actions = AC(self)
-            for element in elements:
-                actions.move_to_element(element).perform()
-                element.click()
-            print("[INFO] Clicked splits")
-
-        except Exception as e_splits:
-            print(f"[ERROR] Failed to click 'Splits' element", e_splits)
-
-    # def get_players(self):
-    #     lst = self.get_team_stats()
-    #     print(lst[1:])
+        time.sleep(2)
 
     def get_team_stats(self):
         num_of_teams = self.get_num_teams() / 2
@@ -271,7 +255,7 @@ class Splits(webdriver.Chrome):
         filtered_stats = []
 
         try:
-            filtered_stats = [element.text for element in stats if not any(keyword in element.text for keyword in unwanted_keywords)]
+            filtered_stats = [element for element in stats if not any(keyword in element for keyword in unwanted_keywords)]
         except Exception as e:
             print(f"Error occured: {e}")
 
@@ -414,10 +398,6 @@ class Splits(webdriver.Chrome):
         print(list(players_meeting_threshold)[:100])
         return list(players_meeting_threshold)
 
-
-
-
-        
     
     def test(self):
         print("In test")
@@ -438,19 +418,14 @@ class Splits(webdriver.Chrome):
 
 
     def scroll_collect_elements(self):
-       
-        print(f"[INFO] Going to {paths.URL} . . .")
-
-        self.get(paths.URL)
-        time.sleep(2)
-        
         all_table_elements = []
 
         prev_height = self.execute_script("return document.body.scrollHeight")
 
+        print("[INFO] Clicking splits . . .")
         while True:
             self.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-            time.sleep(2)
+            # time.sleep(2)
 
             buttons = self.find_elements(By.XPATH, paths.SPLITS_BUTTONS_QUERY)
             actions = AC(self)
@@ -472,13 +447,15 @@ class Splits(webdriver.Chrome):
             new_height = self.execute_script("return document.body.scrollHeight")
             if new_height == prev_height:
                 break  # Exit the loop if the scroll height hasn't changed, meaning no more content is loading
-            prev_height = new_height   
+            prev_height = new_height  
+
+        print("[INFO] Clicked splits") 
 
         # print(all_table_elements)
         # print(len(all_table_elements))
-        for element in table_elements:
-            print(element.text)
-        print(f"Collected {len(all_table_elements)} elements")
+        # for element in table_elements:
+        #     print(element.text)
+        # print(f"Collected {len(all_table_elements)} elements")
         return all_table_elements
     
     
