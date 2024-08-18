@@ -12,7 +12,7 @@ class FileWriter:
                     teams[team] = []
                 teams[team].append(player)
 
-            with open(self.filename, 'w') as file:
+            with open(self.filename, 'w', encoding='utf-8') as file:
                 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 file.write(f"Generated on: {now}\n\n")
 

@@ -80,15 +80,6 @@ class Splits(webdriver.Chrome):
         print(f"[INFO] Number of available games: {len(number_of_teams)}")
         return len(number_of_teams)
     
-    
-    # TODO - Will be updated along the way
-    def write_file(self):
-        underdog_team = self.get_underdog()
-        print(f"[INFO] Underdog team: {underdog_team}")
-        for i in range(len(underdog_team)):
-            f.write(str(underdog_team[i]))
-            f.write(" | ")
-        f.close()
 
     def get_team_pairs(self):
         print("[INFO] Grabbing team pairs . . .")
@@ -169,10 +160,10 @@ class Splits(webdriver.Chrome):
         return stats_span
     
     def get_underdog_team_stats(self):
-        # underdogs = self.get_underdogs()
-        underdogs = paths.TEST_UNDERDOGS
-        # stats = self.get_stats_span()
-        stats = paths.TEST_STATS
+        underdogs = self.get_underdogs()
+        # underdogs = paths.TEST_UNDERDOGS
+        stats = self.get_stats_span()
+        # stats = paths.TEST_STATS
         # for pair in stats:
         #     print(f"{pair} \n")
 
@@ -181,19 +172,19 @@ class Splits(webdriver.Chrome):
         for i in range(len(stats)):
             if underdogs[i][0] == '| Home':
                 team_stats.append([underdogs[i][1], stats[i][1]])
-                print(f"{stats[i][1]} \n")
+                # print(f"{stats[i][1]} \n")
             elif underdogs[i][0] == '| Away':
                 team_stats.append([underdogs[i][1], stats[i][0]])
-                print(f"{stats[i][0]} \n")
-        print(len(team_stats))
+                # print(f"{stats[i][0]} \n")
+        # print(len(team_stats))
 
         player_stats = []
 
         for i in range(len(team_stats)):
-            print(i)
+            # print(i)
             team_name = team_stats[i][0]
             player_data = team_stats[i][1]
-            print(f"Team: {team_name} Player Data: {player_data}")
+            # print(f"Team: {team_name} Player Data: {player_data}")
 
             team_player_stats = {
                 'Team': team_name,
@@ -223,8 +214,8 @@ class Splits(webdriver.Chrome):
 
             player_stats.append(team_player_stats)
 
-        print("\n\n")
-        print(player_stats)
+        # print("\n\n")
+        # print(player_stats)
         return player_stats
     
     
@@ -255,63 +246,37 @@ class Splits(webdriver.Chrome):
                 except ValueError as e:
                     print(f"Eror processing player data: {e}, player info: {player}")
 
-        print(list(players_meeting_threshold))
+        # print(list(players_meeting_threshold))
         return list(players_meeting_threshold)
-
-    
-    def test(self):
-        print("In test")
-        stats_span = []
-        # stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
-        stats = WebDriverWait(self, 10).until(
-            EC.presence_of_all_elements_located((By.XPATH, paths.ALL_STATS_SPAN))
-        )
-
-        for i, element in enumerate(stats):
-            print(f"Element {i}: Type={type(element)}, Text={getattr(element, 'text', 'No text attribute')}")
-
-
-        for element in stats:
-            stats_span.append([element.text])
-        
-        print(stats_span)
-
 
     def scroll_collect_elements(self):
         num_games = self.get_num_games()
         count = 0
         all_table_elements = []
-        seen_positions = set()
 
         prev_height = self.execute_script("return document.body.scrollHeight")
 
-        print("[INFO] Clicking splits . . .")
+        print("[INFO] Collecting information . . .")
         while count < num_games:
             self.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-            # time.sleep(2)
 
-            # buttons = WebDriverWait(self, 10).until(
-            #     EC.presence_of_all_elements_located((By.XPATH, paths.SPLITS_BUTTONS_QUERY))
-            # )
             buttons = self.find_elements(By.XPATH, paths.SPLITS_BUTTONS_QUERY)
             actions = AC(self)
             for button in buttons:
                 try:
                     actions.move_to_element(button).perform()
                     if button.text == 'Splits' and 'active' not in button.get_attribute("class"):
-                        print("[INFO] Splits button not pressed, clicking")
+                        print("[WARNING] Splits button not pressed, clicking")
                         button.click()
                         time.sleep(1)
                     count += 1
                     print(count)
+                    # TODO: Loading bar
 
                     table_elements = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
                     for table in table_elements:
-                        # table_position = tuple(table.location.values())
-                        # if table.text not in all_table_elements and table_position not in seen_positions:
                         all_table_elements.append(table.text)
-                        #     all_table_elements.append(table.text)
-                        #     seen_positions.add(table_position)
+
                             
 
                 except Exception as e:
@@ -325,7 +290,7 @@ class Splits(webdriver.Chrome):
                 break  # Exit the loop if the scroll height hasn't changed, meaning no more content is loading
             prev_height = new_height  
 
-        print("[INFO] Clicked splits") 
+        print("[INFO] Information complete") 
 
         # print(all_table_elements)
         # print(len(all_table_elements))
