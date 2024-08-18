@@ -51,7 +51,7 @@ HOME_TEST_CSS = "div.stat-section div.projected.table-wrapper.x-scroll div.overf
 
 
 TEST_XPATH = "//div[@id='lineup-app']/div[2]/div[1]/div[8]/div[1]/div[1]/div[2]/div[3]/a[1]"
-TEST1_X = "//a[@href='javascript:void(0)' and @class='tabs-btn' and contains(text(), 'Splits')]"
+SPLITS_BUTTONS_QUERY = "//a[@href='javascript:void(0)' and contains(@class, 'tabs-btn') and contains(text(), 'Splits')]"
 
 # /html/body/div[@class='dialog-off-canvas-main-canvas']/div[@class='background bg-white']/div[@class='container']/div[@class='page-content row no-gutters']/div[@id='Main']/div[@id='lineup-app']/div[@class='match-lineup-wrapper']/div[@class='ssg-scm ssg-scm-group-offers']/div[1]/div[1]/div[@class='lineup-page-match']/div[@class='team-title-section']/div[@class='team-title away-team-title']/div[@class='title']/span[@class='team-name']
 
@@ -66,3 +66,31 @@ HOME_NAME_XPATH = "(//span[@class='team-name'])[2]"
 
 # //div[@id='lineup-app']/div[2]/div[1]/div[4]/div[1]/div[1]/div[1]/div[3]/div[2]/span[1]
 
+TEAMS_NAME_SPAN = "//span[@class='team-name']"
+HOME_TEAM_ODDS_SPAN = "//div[@class='odds']"
+AWAY_TEAM_ODDS_SPAN = "//div[@class='odds push-right']"
+
+# 
+HOME_STATS_SPAN = "//div[@class='table-wrapper x-scroll confirmed']"
+AWAY_STATS_SPAN = "//div[@class='table-wrapper x-scroll confirmed mlb mobile-hidden']"
+
+
+# Team name example:                  "<span class='team-name'> Orioles</span>"
+# Home stats are always contained in: "<div class='table-wrapper x-scroll confirmed'>"
+# Away stats are always contained in: "<div class='table-wrapper x-scroll confirmed mlb mobile-hidden'>"
+ALL_STATS_SPAN = "//table[contains(@class,'table table-striped')]"
+
+# //table[contains(@class,'table table-striped')]
+
+# text_list = [element.text for element in elements]
+
+# # Join the texts into a single string, separated by commas
+# combined_text = ", ".join(text_list)
+
+# # If you want to split them again into a list (though it's the same as `text_list`)
+# separated_list = combined_text.split(", ")
+
+# # Output the results
+# print(text_list)  # ['Text of element 1', 'Text of element 2']
+# print(combined_text)  # 'Text of element 1, Text of element 2'
+# print(separated_list)  # ['Text of element 1', 'Text of element 2']
