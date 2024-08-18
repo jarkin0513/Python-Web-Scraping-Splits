@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.action_chains import ActionChains as AC
 import time
+from progress.bar import Bar
 import Splits.Paths as paths
 
 
@@ -67,6 +68,7 @@ class Splits(webdriver.Chrome):
                 lst = ['| Away', underdog_name, underdog_odds, game_index]
                 underdogs_output.append(lst)
 
+        print("[INFO] Underdogs:")
         print(underdogs_output)
         # print(len(underdogs_output))
 
@@ -77,7 +79,6 @@ class Splits(webdriver.Chrome):
     # Finds the number of teams to index through 
     def get_num_games(self):
         number_of_teams = self.find_elements(By.CSS_SELECTOR, paths.NUM)
-        print(f"[INFO] Number of available games: {len(number_of_teams)}")
         return len(number_of_teams)
     
 
@@ -254,9 +255,12 @@ class Splits(webdriver.Chrome):
         count = 0
         all_table_elements = []
 
+        print(f"[INFO] Number of available games: {num_games}")
+
+        bar = Bar('[INFO] Collecting information', max = num_games)
+
         prev_height = self.execute_script("return document.body.scrollHeight")
 
-        print("[INFO] Collecting information . . .")
         while count < num_games:
             self.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 
@@ -270,7 +274,8 @@ class Splits(webdriver.Chrome):
                         button.click()
                         time.sleep(1)
                     count += 1
-                    print(count)
+                    bar.next()
+                    # print(count)
                     # TODO: Loading bar
 
                     table_elements = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
@@ -290,7 +295,8 @@ class Splits(webdriver.Chrome):
                 break  # Exit the loop if the scroll height hasn't changed, meaning no more content is loading
             prev_height = new_height  
 
-        print("[INFO] Information complete") 
+        bar.finish()
+        print("[INFO] Finished getting info") 
 
         # print(all_table_elements)
         # print(len(all_table_elements))
