@@ -51,9 +51,7 @@ class Splits(webdriver.Chrome):
             for element in elements:
                 actions.move_to_element(element).perform()
                 element.click()
-            actions.scroll_by_amount(0, 1000).perform()
             print("[INFO] Clicked splits")
-            time.sleep(2)
 
         except Exception as e_splits:
             print(f"[ERROR] Failed to click 'Splits' element", e_splits)
@@ -262,7 +260,11 @@ class Splits(webdriver.Chrome):
     def get_stats_span(self):
         print("[INFO] Getting stats span . . .")
         stats_span = []
-        stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
+        stats = self.scroll_collect_elements()
+        # stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
+        # stats = WebDriverWait(self, 10).until(
+        #     EC.presence_of_all_elements_located((By.XPATH, paths.ALL_STATS_SPAN))
+        # )
 
         # Filter out pitchers
         unwanted_keywords = ['OPP PITCHER']
@@ -286,51 +288,55 @@ class Splits(webdriver.Chrome):
 
         
         print(stats_span)
-        print(len(stats))
+        print(len(stats_span))
         print("[INFO] Got stats span")
         return stats_span
     
     def get_underdog_team_stats(self):
+        actions = AC(self)
+        actions.scroll_by_amount(0, 1000).perform()
+        time.sleep(2)
+
         underdogs = self.get_underdogs()
         # print(underdogs)
         print()
         stats = self.get_stats_span()
-        # print(stats)
+        print(stats)
         print(len(stats))
 
         team_stats = []
 
-        for i, team_pair in enumerate(stats):
-            # print(i)
-            if len(team_pair) < 2:
-                continue
+        # for i, team_pair in enumerate(stats):
+        #     # print(i)
+        #     if len(team_pair) < 2:
+        #         continue
 
-            # print(team_pair)
+        #     # print(team_pair)
 
-            away_stat = team_pair[0]
-            home_stat = team_pair[1]
+        #     away_stat = team_pair[0]
+        #     home_stat = team_pair[1]
 
-            # if i + 1 < len(stats):
-            #     home_stat = stats[i + 1]
-            #     away_stat = stats[i]
+        #     # if i + 1 < len(stats):
+        #     #     home_stat = stats[i + 1]
+        #     #     away_stat = stats[i]
 
-            for team in underdogs:
-                if team[0] == '| Home':
-                    home_final = [team[1], home_stat]
-                    team_stats.append(home_final)
-                elif team[0] == '| Away':
-                    away_final = [team[1], away_stat[i][0]]
-                    team_stats.append(away_final)
-            # print(team_stats)
-
-        # for i in range(0, len(stats)):
         #     for team in underdogs:
         #         if team[0] == '| Home':
-        #             home_final = [team[1], stats[i][1]]
+        #             home_final = [team[1], home_stat]
         #             team_stats.append(home_final)
         #         elif team[0] == '| Away':
-        #             away_final = [team[1], stats[i][0]]
+        #             away_final = [team[1], away_stat[i][0]]
         #             team_stats.append(away_final)
+        #     # print(team_stats)
+
+        for i in range(0, len(stats)):
+            for team in underdogs:
+                if team[0] == '| Home':
+                    home_final = [team[1], stats[i][1]]
+                    team_stats.append(home_final)
+                elif team[0] == '| Away':
+                    away_final = [team[1], stats[i][0]]
+                    team_stats.append(away_final)
 
         # print(team_stats)
 
@@ -374,7 +380,7 @@ class Splits(webdriver.Chrome):
                 'Players': team_player_stats
             })
 
-        print(player_stats)
+        # print(player_stats)
         print("\n\n")
         return player_stats
     
@@ -430,4 +436,49 @@ class Splits(webdriver.Chrome):
         
         print(stats_span)
 
+
+    def scroll_collect_elements(self):
+       
+        print(f"[INFO] Going to {paths.URL} . . .")
+
+        self.get(paths.URL)
+        time.sleep(2)
+        
+        all_table_elements = []
+
+        prev_height = self.execute_script("return document.body.scrollHeight")
+
+        while True:
+            self.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+            time.sleep(2)
+
+            buttons = self.find_elements(By.XPATH, paths.SPLITS_BUTTONS_QUERY)
+            actions = AC(self)
+            for button in buttons:
+                try:
+                    actions.move_to_element(button).perform()
+                    button.click()
+                    time.sleep(1)
+
+                    table_elements = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
+                    for table in table_elements:
+                        if table not in all_table_elements:
+                            all_table_elements.append(table.text)
+
+                except Exception as e:
+                    print(f"Error interacting with button: {e}")
+
+            #   Check the new scroll height after scrolling
+            new_height = self.execute_script("return document.body.scrollHeight")
+            if new_height == prev_height:
+                break  # Exit the loop if the scroll height hasn't changed, meaning no more content is loading
+            prev_height = new_height   
+
+        # print(all_table_elements)
+        # print(len(all_table_elements))
+        for element in table_elements:
+            print(element.text)
+        print(f"Collected {len(all_table_elements)} elements")
+        return all_table_elements
+    
     
