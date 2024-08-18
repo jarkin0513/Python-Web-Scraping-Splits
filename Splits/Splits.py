@@ -44,37 +44,6 @@ class Splits(webdriver.Chrome):
 
         time.sleep(2)
 
-    def get_team_stats(self):
-        num_of_teams = self.get_num_teams() / 2
-
-        WebDriverWait(self, 10).until(
-            EC.presence_of_element_located((By.XPATH, paths.HOME_TEAM_STATS))
-        )
-        WebDriverWait(self, 10).until(
-            EC.presence_of_element_located((By.XPATH, paths.AWAY_TEAM_STATS))
-        )
-        time.sleep(2)
-
-        team = self.get_underdog()
-        if team[0] == '| Away':
-            team_stats = self.find_element(By.XPATH, paths.AWAY_TEAM_STATS).text  
-        elif team[0] == '| Home':
-            team_stats = self.find_element(By.XPATH, paths.HOME_TEAM_STATS).text
-        else:
-            print("[ERROR] Couldn't get team stats")
-            return
-
-        lst = [[]]
-        for x in team_stats.splitlines():
-            lst.append(x)
-        lst.append("test")
-        return lst
-     
-
-    # TODO - Could be used to check if players' stats meet criteria  
-    def check_stats():
-        pass
-
     # Finds unfavored team based on odds
     def get_underdogs(self):
         print("[INFO] Getting underdogs . . .")
@@ -106,95 +75,11 @@ class Splits(webdriver.Chrome):
     
 
     # Finds the number of teams to index through 
-    def get_num_teams(self):
+    def get_num_games(self):
         number_of_teams = self.find_elements(By.CSS_SELECTOR, paths.NUM)
-        print(f"[INFO] Number of available teams: {len(number_of_teams)}")
+        print(f"[INFO] Number of available games: {len(number_of_teams)}")
         return len(number_of_teams)
     
-    def mutate_team_path(self):
-        lst = [[]]
-        num_of_teams = self.get_num_teams()
-        if num_of_teams == 0:
-            print("[ERROR] No teams found")
-
-        # AWAY 1st row: //table[contains(@class,'table table-striped')]
-        # HOME 1st row: (//table[contains(@class,'table table-striped')]/following::table)[2]
-        temp_home_path = paths.HOME_TEAM_STATS
-        temp_away_path = paths.AWAY_TEAM_STATS
-        print(f"Temp home path: {temp_home_path}")
-        print(f"Temp away path: {temp_away_path}")
-
-        WebDriverWait(self, 10).until(
-            EC.presence_of_element_located((By.XPATH, temp_home_path))
-        )
-        WebDriverWait(self, 10).until(
-            EC.presence_of_element_located((By.XPATH, temp_away_path))
-        )
-        team = self.get_underdog(temp_away_path, temp_home_path)
-        if team[0] == '| Away':
-            team_stats = self.find_element(By.XPATH, temp_away_path).text  
-        elif team[0] == '| Home':
-            team_stats = self.find_element(By.XPATH, temp_home_path).text
-        else:
-            print("[ERROR] Couldn't get team stats")
-            return
-        print(team)
-        
-        num_of_teams -= 1
-
-        for x in team_stats.splitlines():
-            lst.append(x)
-        lst.append("test")
-        print(lst)
-
-        while num_of_teams != 0:
-
-            for i in range(5, 70):
-                try: 
-                    temp_away_path = temp_home_path.replace(temp_home_path[67], str(i), 1)
-                    
-                    temp_home_path = temp_home_path.replace(temp_home_path[67], str(i + 2), 1)
-                    print(f"Temp home path: {temp_home_path}")
-                    print(f"Temp away path: {temp_away_path}")
-                    print(f"i: {i}")
-                    print(f"Number of teams: {num_of_teams}")
-
-                    
-                    while not WebDriverWait(self, 10).until(
-                            EC.presence_of_element_located((By.XPATH, temp_home_path))
-                        ):
-                            self.execute_script("arguments[0].scrollIntoView();", self.find_element(By.XPATH, temp_home_path))
-                            # element = self.find_element(By.XPATH, temp_home_path)
-                        
-                        # WebDriverWait(self, 1).until(
-                        #     EC.presence_of_element_located((By.XPATH, temp_home_path))
-                        # )
-                    # WebDriverWait(self, 1).until(
-                    #     EC.presence_of_element_located((By.XPATH, temp_away_path))
-                    # )
-                    time.sleep(2)
-
-                    team = self.get_underdog(temp_away_path, temp_home_path)
-                    if team[0] == '| Away':
-                        team_stats = self.find_element(By.XPATH, temp_away_path).text  
-                    elif team[0] == '| Home':
-                        team_stats = self.find_element(By.XPATH, temp_home_path).text
-                    else:
-                        print("[ERROR] Couldn't get team stats")
-                        return
-                
-                except Exception as e:
-                    print(f"Error occurred: {e}")
-                
-            num_of_teams -= 1
-            
-
-            
-            for x in team_stats.splitlines():
-                lst.append(x)
-            lst.append("test")
-        return lst
-
     
     # TODO - Will be updated along the way
     def write_file(self):
@@ -230,7 +115,7 @@ class Splits(webdriver.Chrome):
                 print(f"[WARNING] Team(s) in game {i + 1} does not have odds listed (Ignoring)")
 
         print("[INFO] Grabbed team pairs")
-        print(team_pairs)
+        # print(team_pairs)
         return team_pairs
     
     def is_castable_to_int(self, value):
@@ -245,13 +130,11 @@ class Splits(webdriver.Chrome):
         print("[INFO] Getting stats span . . .")
         stats_span = []
         stats = self.scroll_collect_elements()
-        # stats = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
-        # stats = WebDriverWait(self, 10).until(
-        #     EC.presence_of_all_elements_located((By.XPATH, paths.ALL_STATS_SPAN))
-        # )
+        num_games = self.get_num_games()
+        pairs_count = 0
 
         # Filter out pitchers
-        unwanted_keywords = ['OPP PITCHER']
+        unwanted_keywords = ['OPP PITCHER', 'IP HA ER BB K W']
         filtered_stats = []
 
         try:
@@ -259,7 +142,15 @@ class Splits(webdriver.Chrome):
         except Exception as e:
             print(f"Error occured: {e}")
 
+        # for i in range(len(filtered_stats)):
+        #     print(filtered_stats[i])
+
         for i in range(0, len(filtered_stats), 2):
+            print(f"pairs count: {pairs_count}")
+            print(f"num games: {num_games}")
+            if pairs_count >= num_games:
+                break
+
             team_pair = []
             if i < len(filtered_stats):
                 away_team = filtered_stats[i]
@@ -269,58 +160,66 @@ class Splits(webdriver.Chrome):
                 team_pair.append([home_team])
 
             stats_span.append(team_pair)
+            pairs_count += 1
 
         
-        print(stats_span)
-        print(len(stats_span))
+        # print(stats_span)
+        # print(len(stats_span))
         print("[INFO] Got stats span")
+        for pair in stats_span:
+            print(f"{pair}\n")
         return stats_span
     
     def get_underdog_team_stats(self):
-        actions = AC(self)
-        actions.scroll_by_amount(0, 1000).perform()
-        time.sleep(2)
+        # actions = AC(self)
+        # actions.scroll_by_amount(0, 1000).perform()
+        # time.sleep(2)
 
         underdogs = self.get_underdogs()
         # print(underdogs)
-        print()
+
         stats = self.get_stats_span()
-        print(stats)
-        print(len(stats))
+        # for pair in stats:
+        #     print(f"{pair} \n")
+            
+        # print(stats[0])
+        # print(len(stats))
 
         team_stats = []
 
-        # for i, team_pair in enumerate(stats):
-        #     # print(i)
-        #     if len(team_pair) < 2:
-        #         continue
+        for i, team_pair in enumerate(stats):
+            # print(i)
+            # print(team_pair)
+            if len(team_pair) < 2:
+                continue
 
         #     # print(team_pair)
 
-        #     away_stat = team_pair[0]
-        #     home_stat = team_pair[1]
+            away_stat = team_pair[0]
+            home_stat = team_pair[1]
 
         #     # if i + 1 < len(stats):
         #     #     home_stat = stats[i + 1]
         #     #     away_stat = stats[i]
 
-        #     for team in underdogs:
-        #         if team[0] == '| Home':
-        #             home_final = [team[1], home_stat]
-        #             team_stats.append(home_final)
-        #         elif team[0] == '| Away':
-        #             away_final = [team[1], away_stat[i][0]]
-        #             team_stats.append(away_final)
-        #     # print(team_stats)
-
-        for i in range(0, len(stats)):
             for team in underdogs:
                 if team[0] == '| Home':
-                    home_final = [team[1], stats[i][1]]
+                    home_final = [team[1], home_stat]
                     team_stats.append(home_final)
                 elif team[0] == '| Away':
-                    away_final = [team[1], stats[i][0]]
+                    away_final = [team[1], away_stat[i][0]]
                     team_stats.append(away_final)
+        
+        print(team_stats)
+
+        # for i in range(0, len(stats)):
+        #     for team in underdogs:
+        #         if team[0] == '| Home':
+        #             home_final = [team[1], stats[i][1]]
+        #             team_stats.append(home_final)
+        #         elif team[0] == '| Away':
+        #             away_final = [team[1], stats[i][0]]
+        #             team_stats.append(away_final)
 
         # print(team_stats)
 
@@ -350,18 +249,92 @@ class Splits(webdriver.Chrome):
                             'AVG': avg
                         })
 
-                        # Check for duplicates
-                        if not any(player['Player'] == player_name for player in team_player_stats):
-                            team_player_stats.append({
-                                'Player': player_name,
-                                'AB': ab,
-                                'HR': hr,
-                                'AVG': avg
-                            })
+                        # # Check for duplicates
+                        # if not any(player['Player'] == player_name for player in team_player_stats):
+                        #     team_player_stats.append({
+                        #         'Player': player_name,
+                        #         'AB': ab,
+                        #         'HR': hr,
+                        #         'AVG': avg
+                        #     })
+            unique_players = {}
+            for player in team_player_stats:
+                unique_players[player['Player']] = player
 
             player_stats.append({
                 'Team': team_name,
-                'Players': team_player_stats
+                'Players': list(unique_players.values())      #team_player_stats
+            })
+
+        # print(player_stats)
+        print("\n\n")
+        return player_stats
+    
+    def get_underdog_team_stats1(self):
+        underdogs = self.get_underdogs()
+        # print(underdogs)
+        stats = self.get_stats_span()
+        print(stats)
+        print(len(stats[0]))
+
+        team_stats = []
+
+        for team in underdogs:
+
+            away_stat = team_pair[0]
+            home_stat = team_pair[1]
+
+            for team in underdogs:
+                if team[0] == '| Home':
+                    home_final = [team[1], home_stat]
+                    team_stats.append(home_final)
+                elif team[0] == '| Away':
+                    away_final = [team[1], away_stat[i][0]]
+                    team_stats.append(away_final)
+        
+        print(team_stats)
+
+        player_stats = []
+
+        for team in team_stats:
+            team_name = team[0]
+            player_data = team[1]
+
+            team_player_stats = []
+
+            for stats_string in player_data:
+                player_lines = stats_string.split('\n')
+
+                for line in player_lines:
+                    if line.strip() and not line.startswith("#"):
+                        parts = line.split()
+                        player_name = " ".join(parts[1:-5])
+                        ab = parts[-5]
+                        hr = parts[-3]
+                        avg = parts[-1]
+
+                        team_player_stats.append({
+                            'Player': player_name,
+                            'AB': ab,
+                            'HR': hr,
+                            'AVG': avg
+                        })
+
+                        # # Check for duplicates
+                        # if not any(player['Player'] == player_name for player in team_player_stats):
+                        #     team_player_stats.append({
+                        #         'Player': player_name,
+                        #         'AB': ab,
+                        #         'HR': hr,
+                        #         'AVG': avg
+                        #     })
+            unique_players = {}
+            for player in team_player_stats:
+                unique_players[player['Player']] = player
+
+            player_stats.append({
+                'Team': team_name,
+                'Players': list(unique_players.values())      #team_player_stats
             })
 
         # print(player_stats)
@@ -418,7 +391,9 @@ class Splits(webdriver.Chrome):
 
 
     def scroll_collect_elements(self):
+        num_games = self.get_num_games()
         all_table_elements = []
+        seen_positions = set()
 
         prev_height = self.execute_script("return document.body.scrollHeight")
 
@@ -437,8 +412,11 @@ class Splits(webdriver.Chrome):
 
                     table_elements = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
                     for table in table_elements:
-                        if table not in all_table_elements:
+                        table_position = tuple(table.location.values())
+                        if table.text not in all_table_elements and table_position not in seen_positions:
                             all_table_elements.append(table.text)
+                            seen_positions.add(table_position)
+                            
 
                 except Exception as e:
                     print(f"Error interacting with button: {e}")
