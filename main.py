@@ -6,12 +6,17 @@ def main() -> int:
 
     args = sys.argv
     if(len(sys.argv) == 4):
-        ab_threshold = int(args[1])
-        hr_threshold = int(args[2])
-        avg_threshold = float(args[3])
+        try:
+            ab_threshold = int(args[1])
+            hr_threshold = int(args[2])
+            avg_threshold = float(args[3])
+        except ValueError:
+            print(f"[ERROR] Arguments must be numbers: AB = {args[1]} HR = {args[2]} AVG = {args[3]}")
+            return -3
+        
     elif(len(sys.argv) == 1):
         ab_threshold = 5 # 5, 1
-        hr_threshold = 0 # 0, 1
+        hr_threshold = 1 # 1, 1
         avg_threshold = .200 # .200, .300
     else:
         print(f"[ERROR] Invalid number of arguments")
