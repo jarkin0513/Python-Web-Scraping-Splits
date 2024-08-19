@@ -165,7 +165,6 @@ class Splits(webdriver.Chrome):
         stats = self.get_stats_span()
         # underdogs = paths.TEST_UNDERDOGS
         # stats = paths.TEST_STATS
-        
         # for pair in stats:
         #     print(f"{pair} \n")
 
@@ -299,7 +298,3 @@ class Splits(webdriver.Chrome):
         #     print(element.text)
         # print(f"Collected {len(all_table_elements)} elements")
         return all_table_elements
-    
-   
-    
-    
