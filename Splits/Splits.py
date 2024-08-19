@@ -40,11 +40,14 @@ class Splits(webdriver.Chrome):
             EC.presence_of_element_located((By.CLASS_NAME, paths.BUTTON_SECTION))
             )
             print(f"[INFO] Pulled up {paths.URL}")
+            time.sleep(2)
+            return True
 
         except Exception as e_url:
-            print(f"[ERROR] Failed to go to: {paths.URL}", e_url)
+            print(f"\033[91m[ERROR] Failed to go to: {paths.URL}\033[0m", e_url)
+            return False
 
-        time.sleep(2)
+        
 
     # Finds unfavored team based on odds
     def get_underdogs(self):
@@ -96,7 +99,7 @@ class Splits(webdriver.Chrome):
         away_team_odds = [span.text for span in away_team_odds_span]
 
         if len(team_names) != (len(home_team_odds) + len(away_team_odds)):
-            print("[ERROR] Number of teams does not match sum of home and away odds")
+            print("\033[91m[ERROR] Number of teams does not match sum of home and away odds\033[0m")
             return
 
         for i in range(len(home_team_odds)): 
@@ -105,7 +108,7 @@ class Splits(webdriver.Chrome):
                 away_team = ["Away", team_names[2 * i], away_team_odds[i], i]
                 team_pairs.append([home_team, away_team])
             else:
-                print(f"[WARNING] Team(s) in game {i + 1} does not have odds listed (Ignoring)")
+                print(f"\033[93m[WARNING] Team(s) in game {i + 1} does not have odds listed (Ignoring)\033[0m")
 
         print("[INFO] Grabbed team pairs")
         # print(team_pairs)

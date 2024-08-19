@@ -30,10 +30,10 @@ class FileWriter:
                     file.write("-----------------------------------\n")
                     file.write("\n")
 
-            print(f"[INFO] Results successfully written to {self.filename}")
+            print(f"\033[92m[INFO] Results successfully written to {self.filename}\033[0m")
 
         except Exception as e:
-            print(f"[ERROR] Failed to write to file: {e}")
+            print(f"\033[91m[ERROR] Failed to write to file: {e}\033[0m")
 
     def add_thresholds(self, ab, hr, avg):
         threshold_str = f"With thresholds against next OPP pitcher:\n    At least {ab} AB\n    Less than {hr} HR\n    At or below {avg} AVG\n\n"
