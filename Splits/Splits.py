@@ -20,6 +20,7 @@ class Splits(webdriver.Chrome):
         self.driver_path = driver_path        
         self.chrome_options = chrome_options
         chrome_options.add_argument("--start-maximized")
+        # chrome_options.add_argument('--headless=new')
         chrome_options.add_experimental_option("detach", True)
         chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
         self.teardown = teardown
