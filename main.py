@@ -1,25 +1,25 @@
 from Splits.Splits import Splits
 from Splits.FileWriter import FileWriter
-import time
+import sys
 
 def main() -> int:
-    ab_threshold = 1 # 5
-    hr_threshold = 1 # 0 
-    avg_threshold = .300 # .200
+
+    args = sys.argv
+    if(len(sys.argv) == 4):
+        ab_threshold = int(args[1])
+        hr_threshold = int(args[2])
+        avg_threshold = float(args[3])
+    elif(len(sys.argv) == 1):
+        ab_threshold = 5 # 5, 1
+        hr_threshold = 0 # 0, 1
+        avg_threshold = .200 # .200, .300
+    else:
+        print(f"[ERROR] Invalid number of arguments")
+        return -2
     
     try:
         with Splits() as bot:
             bot.go_to_url()
-            # bot.get_team_pairs()
-            # bot.get_underdogs()
-            # bot.get_num_teams()
-            # bot.write_file()
-            # bot.get_players()
-            # bot.mutate_team_path()
-            # bot.get_stats_span()
-            # bot.scroll_collect_elements()
-            
-            # bot.get_underdog_team_stats()
 
             final_players = bot.get_final_players(ab_threshold, hr_threshold, avg_threshold)
 
