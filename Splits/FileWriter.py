@@ -36,5 +36,5 @@ class FileWriter:
             print(f"[ERROR] Failed to write to file: {e}")
 
     def add_thresholds(self, ab, hr, avg):
-        threshold_str = f"With Thresholds for Next OPP Pitcher:\n    At least {ab} AB\n    Less than {hr} HR\n    At or below {avg} AVG\n\n"
+        threshold_str = f"With thresholds against next OPP pitcher:\n    At least {ab} AB\n    Less than {hr} HR\n    At or below {avg} AVG\n\n"
         return threshold_str
