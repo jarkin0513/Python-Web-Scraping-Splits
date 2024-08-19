@@ -1,0 +1,75 @@
+Generated on: 2024-08-18 23:53:18
+
+With Thresholds for Next OPP Pitcher:
+    At least 1 AB
+    Less than 1 HR
+    At or below 0.3 AVG
+
+----------------------------------
+
+Team: Angels
+  - Kevin Pillar (R)
+  - Aaron Hicks (B)
+  - Mickey Moniak (L)
+  - Chad Wallach (R)
+  - Brandon Drury (R)
+  - Keston Hiura (R)
+  - Matt Thaiss (L)
+-----------------------------------
+
+Team: Athletics
+  - Brent Rooker (R)
+-----------------------------------
+
+Team: Mariners
+  - Dominic Canzone (L)
+  - Julio Rodríguez (R)
+  - Josh Rojas (L)
+  - Mitch Haniger (R)
+-----------------------------------
+
+Team: Marlins
+  - Nick Fortes (R)
+-----------------------------------
+
+Team: Orioles
+  - Ryan O'Hearn (L)
+  - Anthony Santander (B)
+  - Austin Slater (R)
+  - Ryan Mountcastle (R)
+  - Gunnar Henderson (L)
+  - Ramón Urías (R)
+  - Adley Rutschman (B)
+-----------------------------------
+
+Team: Red Sox
+  - Jarren Duran (L)
+  - Christopher Cron (R)
+  - Garrett Cooper (R)
+  - Reese McGuire (L)
+  - Danny Jansen (R)
+  - David Hamilton (L)
+-----------------------------------
+
+Team: Reds
+  - Luke Maile (R)
+  - Mike Ford (L)
+  - Tyler Stephenson (R)
+  - Jonathan India (R)
+  - Jake Fraley (L)
+-----------------------------------
+
+Team: Twins
+  - Kyle Farmer (R)
+  - Edouard Julien (L)
+  - Max Kepler (L)
+  - Willi Castro (B)
+  - Carlos Santana (B)
+  - Trevor Larnach (L)
+  - Christian Vázquez (R)
+-----------------------------------
+
+Team: White Sox
+  - Nick Senzel (R)
+-----------------------------------
+
