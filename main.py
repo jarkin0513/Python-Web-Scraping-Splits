@@ -27,7 +27,7 @@ def main() -> int:
 
             file_writer.write_results(final_players, ab_threshold, hr_threshold, avg_threshold)
             
-            bot.teardown = True
+            # bot.teardown = True
 
         return 0
     except Exception as e:

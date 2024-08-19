@@ -46,7 +46,7 @@ ALL_STATS_SPAN = "//table[contains(@class,'table table-striped')]"
 
 TEST_STATS = [
 [ 
-['# POS NAME AB H HR RBI AVG\n1 2B Maikel Garcia (R) 0 0 0 0 .000\n2 SS Bobby Witt (R) 0 0 0 0 .000\n3 DH Vinnie Pasquantino (L) 0 0 0 0 .000\n4 1B Salvador Perez (R) 0 0 0 0 .000\n5 RF Hunter Renfroe (R) 6 1 1 1 .167\n6 C Freddy Fermin (R) 0 0 0 0 .000\n7 CF Garrett Hampson (R) 1 1 0 0 1.000\n8 3B Paul DeJong (R) 2 0 0 0 .000\n9 LF Dairon Blanco (R) 0 0 0 0 .000'], 
+['# POS NAME AB H HR RBI AVG\n1 2B Maikel Garcia (R) 1 2 3 4 .000\n2 SS Bobby Witt (R) 0 0 0 0 .000\n3 DH Vinnie Pasquantino (L) 0 0 0 0 .000\n4 1B Salvador Perez (R) 0 0 0 0 .000\n5 RF Hunter Renfroe (R) 6 1 1 1 .167\n6 C Freddy Fermin (R) 0 0 0 0 .000\n7 CF Garrett Hampson (R) 1 1 0 0 1.000\n8 3B Paul DeJong (R) 2 0 0 0 .000\n9 LF Dairon Blanco (R) 0 0 0 0 .000'], 
 ['# POS NAME AB H HR RBI AVG\n1 2B Jonathan India (R) 5 0 0 0 .000\n2 SS Elly De La Cruz (B) 2 0 0 0 .000\n3 C Tyler Stephenson (R) 3 0 0 0 .000\n4 CF TJ Friedl (L) 6 1 0 0 .167\n5 LF Spencer Steer (R) 5 0 0 0 .000\n6 1B Jeimer Candelario (B) 3 0 0 0 .000\n7 DH Ty France (R) 18 9 0 2 .500\n8 RF Jake Fraley (L) 7 5 0 2 .714\n9 3B Noelvi Marte (R) 0 0 0 0 .000']
 ], 
 

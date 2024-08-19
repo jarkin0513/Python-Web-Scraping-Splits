@@ -162,9 +162,10 @@ class Splits(webdriver.Chrome):
     
     def get_underdog_team_stats(self):
         underdogs = self.get_underdogs()
-        # underdogs = paths.TEST_UNDERDOGS
         stats = self.get_stats_span()
+        # underdogs = paths.TEST_UNDERDOGS
         # stats = paths.TEST_STATS
+        
         # for pair in stats:
         #     print(f"{pair} \n")
 
@@ -221,10 +222,9 @@ class Splits(webdriver.Chrome):
     
     
     def get_final_players(self, threshold_ab, threshold_hr, threshold_avg):
-        # player_stats = [{'Team': 'Pirates', 'Players': [{'Player': 'Jose Asuna ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Ji Hwan Bae (L)', 'AB': '1', 'HR': '0', 'AVG': '.000'}, {'Player': 'Joey Bart (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Jack Brannigan ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Oneil Cruz (L)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Bryan De La Cruz (R)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Yasmani Grandal (B)', 'AB': '16', 'HR': '2', 'AVG': '.375'}, {'Player': "Ke'Bryan Hayes (R)", 'AB': '9', 'HR': '0', 'AVG': '.222'}, {'Player': 'Connor Joe (R)', 'AB': '5', 'HR': '0', 'AVG': '.400'}, {'Player': 'Isiah Kiner-Falefa (R)', 'AB': '8', 'HR': '0', 'AVG': '.375'}, {'Player': 'Grant Koch (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Andrew McCutchen (R)', 'AB': '11', 'HR': '0', 'AVG': '.091'}, {'Player': 'Bryan Reynolds (B)', 'AB': '11', 'HR': '0', 'AVG': '.000'}, {'Player': 'Michael A. Taylor (R)', 'AB': '3', 'HR': '1', 'AVG': '.333'}, {'Player': 'Rowdy Tellez (L)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Jared Triolo (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}]}, {'Team': 'Tigers', 'Players': [{'Player': 'Jose Asuna ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Ji Hwan Bae (L)', 'AB': '1', 'HR': '0', 'AVG': '.000'}, {'Player': 'Joey Bart (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Jack Brannigan ()', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Oneil Cruz (L)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Bryan De La Cruz (R)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Yasmani Grandal (B)', 'AB': '16', 'HR': '2', 'AVG': '.375'}, {'Player': "Ke'Bryan Hayes (R)", 'AB': '9', 'HR': '0', 'AVG': '.222'}, {'Player': 'Connor Joe (R)', 'AB': '5', 'HR': '0', 'AVG': '.400'}, {'Player': 'Isiah Kiner-Falefa (R)', 'AB': '8', 'HR': '0', 'AVG': '.375'}, {'Player': 'Grant Koch (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}, {'Player': 'Andrew McCutchen (R)', 'AB': '11', 'HR': '0', 'AVG': '.091'}, {'Player': 'Bryan Reynolds (B)', 'AB': '11', 'HR': '0', 'AVG': '.000'}, {'Player': 'Michael A. Taylor (R)', 'AB': '3', 'HR': '1', 'AVG': '.333'}, {'Player': 'Rowdy Tellez (L)', 'AB': '6', 'HR': '0', 'AVG': '.167'}, {'Player': 'Jared Triolo (R)', 'AB': '0', 'HR': '0', 'AVG': '.000'}]}]
         player_stats = self.get_underdog_team_stats()
         # print(player_stats)
-        print("\n\n")
+        # print("\n\n")
 
         players_meeting_threshold = set() # Avoid duplicates
 
@@ -270,23 +270,18 @@ class Splits(webdriver.Chrome):
                 try:
                     actions.move_to_element(button).perform()
                     if button.text == 'Splits' and 'active' not in button.get_attribute("class"):
-                        print("[WARNING] Splits button not pressed, clicking")
                         button.click()
                         time.sleep(1)
+
                     count += 1
                     bar.next()
-                    # print(count)
-                    # TODO: Loading bar
-
-                    table_elements = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
-                    for table in table_elements:
-                        all_table_elements.append(table.text)
-
-                            
 
                 except Exception as e:
                     print(f"Error interacting with button: {e}")
 
+            table_elements = self.find_elements(By.XPATH, paths.ALL_STATS_SPAN)
+            for table in table_elements:
+                all_table_elements.append(table.text)
             
 
             #   Check the new scroll height after scrolling
