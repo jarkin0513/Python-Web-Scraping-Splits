@@ -72,11 +72,11 @@ class Splits(webdriver.Chrome):
                 lst = ['| Away', underdog_name, underdog_odds, game_index]
                 underdogs_output.append(lst)
 
-        print("[INFO] Underdogs:")
-        print(underdogs_output)
+        print("[INFO] Retrieved Underdogs:")
+        print([item[:2] for item in underdogs_output])
+        # print(underdogs_output)
         # print(len(underdogs_output))
 
-        print("[INFO] Got underdogs")
         return underdogs_output
     
 
@@ -87,7 +87,7 @@ class Splits(webdriver.Chrome):
     
 
     def get_team_pairs(self):
-        print("[INFO] Grabbing team pairs . . .")
+        print("[INFO] Getting team pairs . . .")
         team_pairs = []
 
         team_names_span = self.find_elements(By.XPATH, paths.TEAMS_NAME_SPAN)
@@ -110,7 +110,8 @@ class Splits(webdriver.Chrome):
             else:
                 print(f"\033[93m[WARNING] Team(s) in game {i + 1} does not have odds listed (Ignoring)\033[0m")
 
-        print("[INFO] Grabbed team pairs")
+        print("[INFO] Retrieved team pairs")
+        print([[team[:2] for team in pair] for pair in team_pairs])
         # print(team_pairs)
         return team_pairs
     
@@ -159,7 +160,7 @@ class Splits(webdriver.Chrome):
         
         # print(stats_span)
         # print(len(stats_span))
-        print("[INFO] Got stats span")
+        print("[INFO] Retrieved stats span")
         # for pair in stats_span:
         #     print(f"{pair}\n")
         return stats_span
