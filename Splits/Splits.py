@@ -24,6 +24,7 @@ class Splits(webdriver.Chrome):
         chrome_options.add_experimental_option("detach", True)
         chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
         self.teardown = teardown
+        self._team_pairs = None  # Cache variable for team pairs
         super(Splits, self).__init__(options=chrome_options)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -47,7 +48,12 @@ class Splits(webdriver.Chrome):
             print(f"\033[91m[ERROR] Failed to go to: {paths.URL}\033[0m", e_url)
             return False
 
-        
+    def is_castable_to_int(self, value):
+        try:
+            int(value)
+            return True
+        except ValueError:
+            return False
 
     # Finds unfavored team based on odds
     def get_underdogs(self):
@@ -79,15 +85,13 @@ class Splits(webdriver.Chrome):
 
         return underdogs_output
     
-
-    # Finds the number of teams to index through 
-    def get_num_games(self):
-        number_of_teams = self.find_elements(By.CSS_SELECTOR, paths.NUM)
-        return len(number_of_teams)
-    
-
     def get_team_pairs(self):
+        # Return cached team pairs if already computed
+        if self._team_pairs is not None:
+            return self._team_pairs
+        
         print("[INFO] Getting team pairs . . .")
+
         team_pairs = []
 
         team_names_span = self.find_elements(By.XPATH, paths.TEAMS_NAME_SPAN)
@@ -113,15 +117,14 @@ class Splits(webdriver.Chrome):
         print("[INFO] Retrieved team pairs")
         print([[team[:2] for team in pair] for pair in team_pairs])
         # print(team_pairs)
-        return team_pairs
-    
-    def is_castable_to_int(self, value):
-        try:
-            int(value)
-            return True
-        except ValueError:
-            return False
 
+        # Cache the team pairs for future use
+        self._team_pairs = team_pairs
+        return self._team_pairs
+    
+    # Finds the number of teams to index through 
+    def get_num_games(self):
+        return len(self.get_team_pairs())
             
     def get_stats_span(self):
         print("[INFO] Getting stats span . . .")
