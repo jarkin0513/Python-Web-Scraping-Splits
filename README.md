@@ -125,9 +125,7 @@ If you wish to work with the source code directly:
 Example snippet from [fantasyalarm.com](https://www.fantasyalarm.com/mlb/lineups).
 ![image](https://github.com/user-attachments/assets/a0633ce2-b60f-4240-8c81-4256e3544a79)
 ![image](https://github.com/user-attachments/assets/053756ac-34f8-417d-8508-bf2801357ea9)
-![image](https://github.com/user-attachments/assets/65b31fa6-bc8f-4164-a474-957bda176d24)
-
-
+![image](https://github.com/user-attachments/assets/04626da3-3d7b-4829-b4c1-90787e10c580)
 
 
 ## License
