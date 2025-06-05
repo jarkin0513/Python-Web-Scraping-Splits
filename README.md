@@ -121,5 +121,13 @@ If you wish to work with the source code directly:
 5. Run the script:
    ```python main.py```
 
+---
+![image](https://github.com/user-attachments/assets/053756ac-34f8-417d-8508-bf2801357ea9)
+
+[fantasyalarm.com](https://www.fantasyalarm.com/mlb/lineups)
+![image](https://github.com/user-attachments/assets/a0633ce2-b60f-4240-8c81-4256e3544a79)
+
+
+
 ## License
 This project is for educational purposes only and is provided "as is" without warranty of any kind.
