@@ -84,7 +84,7 @@ No. The provided .exe and Mac executables are standalone — no Python environme
 
 ### Where does the output go?
 The program writes the list of selected players to a file called:
-```output.txt```
+```output.txt```.
 This file will be created in the same folder as the executable.
 
 ### Does Chrome need to be installed?
