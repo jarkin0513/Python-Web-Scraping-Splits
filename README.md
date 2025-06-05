@@ -83,6 +83,35 @@ The program writes the list of selected players to a file called:
 This file will be created in the same folder as the executable.
 
 ### Does Chrome need to be installed?
-Yes. Chrome is required because the app uses Selenium to automate web scraping through Chrome. The bundled chromedriver is version 137.0.7151.68, compatible with Chrome version 137. If your version of Chrome is very different, you may need to update Chrome or use a matching chromedriver.
+Yes. Chrome is required because the app uses Selenium to automate web scraping through Chrome. The bundled ```chromedriver``` is version ```137.0.7151.68```, compatible with Chrome version 137. If your version of Chrome is very different, you may need to update Chrome or use a matching chromedriver.
 
-You can download the latest Google Chrome here:
+You can download the latest Google Chrome [here](https://www.google.com/chrome/).
+
+## Development Setup (For Contributors)
+If you wish to work with the source code directly:
+
+1. Clone the repository:
+   ```git clone https://github.com/jarkin0513/Python-Web-Scraping-Splits.git```
+   ```cd yourrepo```
+2. Install the required Python packages:
+   ```pip install -r requirements.txt```
+3. Download the appropriate version of ```chromedriver``` that matches your installed version of Google Chrome:
+
+    - You can check your Chrome version by navigating to:
+      ```chrome://version/```
+
+    - Download the matching chromedriver [here](https://developer.chrome.com/docs/chromedriver/downloads).
+  
+4.  Place the downloaded ```chromedriver``` binary inside the ```Splits/``` directory:
+    ```
+    yourrepo/
+    ├── main.py
+    ├── Splits/
+        ├── chromedriver    <-- place it here (no extension on Mac/Linux, .exe on Windows)
+    ```
+
+5. Run the script:
+   ```python main.py```
+
+## License
+This project is for educational purposes only and is provided "as is" without warranty of any kind.
