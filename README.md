@@ -53,16 +53,16 @@ There are separate downloads for different Mac processors:
   ```
 - Make the app executable:
   ```bash
-  chmod +x WebScraper-Mac-Intel
+  chmod +x SplitsScraper-Mac-Intel
   ```
   or
   ```bash
-  chmod +x WebScraper-Mac-ARM64
+  chmod +x SplitsScraper-Mac-ARM64
   ```
 
 3. Run the program:
-```./WebScraper-Mac-Intel```
-```./WebScraper-Mac-ARM64```
+```./SplitsScraper-Mac-Intel```
+```./SplitsScraper-Mac-ARM64```
 
 > **Note for Mac users:**: This app is currently provided as a standalone executable file, not a ```.app``` bundle.
 macOS requires Terminal to run raw executables downloaded from the Internet.
