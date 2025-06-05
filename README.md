@@ -96,8 +96,10 @@ You can download the latest Google Chrome [here](https://www.google.com/chrome/)
 If you wish to work with the source code directly:
 
 1. Clone the repository:
-   ```git clone https://github.com/jarkin0513/Python-Web-Scraping-Splits.git```
-   ```cd yourrepo```
+   ```
+       git clone https://github.com/jarkin0513/Python-Web-Scraping-Splits.git
+       cd yourrepo
+   ```
 2. Install the required Python packages:
    ```pip install -r requirements.txt```
 3. Download the appropriate version of ```chromedriver``` that matches your installed version of Google Chrome:
