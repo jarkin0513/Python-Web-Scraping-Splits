@@ -64,7 +64,12 @@ There are separate downloads for different Mac processors:
 ```./WebScraper-Mac-Intel```
 ```./WebScraper-Mac-ARM64```
 
-4. The program will:
+> **Note for Mac users:**: This app is currently provided as a standalone executable file, not a ```.app``` bundle.
+macOS requires Terminal to run raw executables downloaded from the Internet.
+Double-click launching is not available at this time.
+(We may add a double-clickable ```.app``` version in the future!)
+
+5. The program will:
   - Open Chrome automatically.
   - Scrape the relevant data.
   - Write results to an output.txt file located in the same folder as the executable.
