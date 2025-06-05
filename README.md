@@ -42,7 +42,7 @@ There are separate downloads for different Mac processors:
 | Chip Type       | Download File                |
 |-----------------|-------------------------------|
 | Intel-based Macs | `SplitsScraper-Mac-Intel`    |
-| Apple Silicon (M1, M2, M3) | `SplitsScraper-Mac-ARM64.exe` |
+| Apple Silicon (M1, M2, M3) | `SplitsScraper-Mac-ARM64` |
 
 1. Download the correct file from the [Releases](https://github.com/jarkin0513/Python-Web-Scraping-Splits/releases) page based on your Mac's chip.
 2. After downloading:
