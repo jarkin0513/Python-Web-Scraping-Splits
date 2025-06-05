@@ -68,7 +68,7 @@ or<br>
 > **Note for Mac users:**: This app is currently provided as a standalone executable file, not a ```.app``` bundle.
 macOS requires Terminal to run raw executables downloaded from the Internet.
 Double-click launching is not available at this time.
-(We may add a double-clickable ```.app``` version in the future!)
+(I may add a double-clickable ```.app``` version in the future!)
 
 5. The program will:
   - Open Chrome automatically.
