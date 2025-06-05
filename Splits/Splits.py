@@ -12,11 +12,9 @@ from progress.bar import Bar
 import Splits.Paths as paths
 
 
-f = open("output.txt", "w")
-
 class Splits(webdriver.Chrome):
 
-    def __init__(self, driver_path="chromedriver.exe", chrome_options=Options(), teardown=False):
+    def __init__(self, driver_path=paths.chromedriver_path, chrome_options=Options(), teardown=False):
         self.driver_path = driver_path        
         self.chrome_options = chrome_options
         chrome_options.add_argument("--start-maximized")
@@ -25,7 +23,10 @@ class Splits(webdriver.Chrome):
         chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
         self.teardown = teardown
         self._team_pairs = None  # Cache variable for team pairs
-        super(Splits, self).__init__(options=chrome_options)
+
+        service = Service(self.driver_path)
+
+        super(Splits, self).__init__(service=service, options=chrome_options)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.teardown:

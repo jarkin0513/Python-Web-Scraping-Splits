@@ -1,3 +1,29 @@
+import sys
+import os
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+# Export chromedriver_path
+chromedriver_path = resource_path(os.path.join("Splits", "chromedriver.exe"))
+
+def get_output_path():
+    """ Get the absolute path for the output file """
+    if getattr(sys, 'frozen', False):
+        # PyInstaller bundles as one executable
+        base_path = os.path.dirname(sys.executable)
+    else:
+        # Normal python run
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    
+    return os.path.join(base_path, "output.txt")
+
 URL = "https://www.fantasyalarm.com/mlb/lineups"
 
 BUTTON_SECTION = "tool-btn-section"

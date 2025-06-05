@@ -1,5 +1,6 @@
 from Splits.Splits import Splits
 from Splits.FileWriter import FileWriter
+from Splits.Paths import get_output_path
 import sys
 
 def main() -> int:
@@ -30,7 +31,7 @@ def main() -> int:
 
             final_players = bot.get_final_players(ab_threshold, hr_threshold, avg_threshold)
 
-            file_writer = FileWriter("output.txt")
+            file_writer = FileWriter(get_output_path())
 
             file_writer.write_results(final_players, ab_threshold, hr_threshold, avg_threshold)
             

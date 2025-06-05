@@ -1,75 +1,45 @@
-Generated on: 2024-08-18 23:53:18
+Generated on: 2025-06-04 20:47:18
 
-With Thresholds for Next OPP Pitcher:
-    At least 1 AB
+With thresholds against next OPP pitcher:
+    At least 5 AB
     Less than 1 HR
-    At or below 0.3 AVG
+    At or below 0.2 AVG
 
 ----------------------------------
 
-Team: Angels
-  - Kevin Pillar (R)
-  - Aaron Hicks (B)
-  - Mickey Moniak (L)
-  - Chad Wallach (R)
-  - Brandon Drury (R)
-  - Keston Hiura (R)
-  - Matt Thaiss (L)
+Team: Brewers
+  - 3B Andruw Monasterio (R)
 -----------------------------------
 
-Team: Athletics
-  - Brent Rooker (R)
+Team: Diamondbacks
+  - 2B Ketel Marte (B)
+  - 3B Eugenio Suárez (R)
 -----------------------------------
 
-Team: Mariners
-  - Dominic Canzone (L)
-  - Julio Rodríguez (R)
-  - Josh Rojas (L)
-  - Mitch Haniger (R)
+Team: Giants
+  - 3B Matt Chapman (R)
+  - DH Wilmer Flores (R)
 -----------------------------------
 
-Team: Marlins
-  - Nick Fortes (R)
+Team: Guardians
+  - DH Carlos Santana (B)
 -----------------------------------
 
-Team: Orioles
-  - Ryan O'Hearn (L)
-  - Anthony Santander (B)
-  - Austin Slater (R)
-  - Ryan Mountcastle (R)
-  - Gunnar Henderson (L)
-  - Ramón Urías (R)
-  - Adley Rutschman (B)
+Team: Mets
+  - CF Jeff McNeil (L)
 -----------------------------------
 
-Team: Red Sox
-  - Jarren Duran (L)
-  - Christopher Cron (R)
-  - Garrett Cooper (R)
-  - Reese McGuire (L)
-  - Danny Jansen (R)
-  - David Hamilton (L)
+Team: Nationals
+  - 1B Nathaniel Lowe (L)
 -----------------------------------
 
-Team: Reds
-  - Luke Maile (R)
-  - Mike Ford (L)
-  - Tyler Stephenson (R)
-  - Jonathan India (R)
-  - Jake Fraley (L)
+Team: Phillies
+  - CF Brandon Marsh (L)
+  - DH Kyle Schwarber (L)
+  - LF Max Kepler (L)
 -----------------------------------
 
-Team: Twins
-  - Kyle Farmer (R)
-  - Edouard Julien (L)
-  - Max Kepler (L)
-  - Willi Castro (B)
-  - Carlos Santana (B)
-  - Trevor Larnach (L)
-  - Christian Vázquez (R)
------------------------------------
-
-Team: White Sox
-  - Nick Senzel (R)
+Team: Rangers
+  - 2B Marcus Semien (R)
 -----------------------------------
 
