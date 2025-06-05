@@ -60,8 +60,9 @@ There are separate downloads for different Mac processors:
   chmod +x SplitsScraper-Mac-ARM64
   ```
 
-3. Run the program:
-```./SplitsScraper-Mac-Intel```
+3. Run the program:<br>
+```./SplitsScraper-Mac-Intel```<br>
+or<br>
 ```./SplitsScraper-Mac-ARM64```
 
 > **Note for Mac users:**: This app is currently provided as a standalone executable file, not a ```.app``` bundle.
