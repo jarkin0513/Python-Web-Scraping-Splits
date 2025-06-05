@@ -79,8 +79,8 @@ class Splits(webdriver.Chrome):
                 lst = ['| Away', underdog_name, underdog_odds, game_index]
                 underdogs_output.append(lst)
 
-        print("[INFO] Retrieved Underdogs:")
-        print([item[:2] for item in underdogs_output])
+        print("[INFO] Retrieved Underdogs")
+        # print([item[:2] for item in underdogs_output])
         # print(underdogs_output)
         # print(len(underdogs_output))
 
@@ -116,7 +116,7 @@ class Splits(webdriver.Chrome):
                 print(f"\033[93m[WARNING] Team(s) in game {i + 1} does not have odds listed (Ignoring)\033[0m")
 
         print("[INFO] Retrieved team pairs")
-        print([[team[:2] for team in pair] for pair in team_pairs])
+        # print([[team[:2] for team in pair] for pair in team_pairs])
         # print(team_pairs)
 
         # Cache the team pairs for future use
